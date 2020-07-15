@@ -10,41 +10,56 @@
     <div id="content">
       <h1>My Portfolio</h1>
 
-      <p>Hello, my name is Mihai!</p>
-      <p>I am from Romania and I am a student at the University of Bucharest in Computer Science</p>
-      <p>I've just ended my first year and I think it was awesome!</p>
-      <p>I have a great passion for programming since high school</p>
-      <p>I've been to many programming competitions where I usually won prizes!</p>
+      <main>
+        <h2>About me</h2>
+        <p>Hello, my name is Mihai!</p>
+        <p>I am from Romania and I am a student at the University of Bucharest in Computer Science</p>
+        <p>I've just ended my first year and I think it was awesome!</p>
+        <p>I have a great passion for programming since high school</p>
+        <p>I've been to many programming competitions where I usually won prizes!</p>
+      </main>
 
-      <p>I have worked on many projects, most recent two are:</p>
-      <ul>
-          <li>
-            <b>QuizGame</b> 
-            <p>- A project for the OOP class, made with C++20 using latest features and a looot of OOP.</p>
-            <p>- Three types of questions (MultipleChoice, Word and Number) you have to answer.</p>
-            <p>- You can also add questions to the game.</p>
-            <p>- Can be found <a href="https://github.com/PredaMihaiDragos/Facultate/tree/master/Anul%201/POO/QuizGame">here</a></p>
-          </li>
-          <li>
-            <b>Website for blood analysis lab</b>
-            <p>- A project for both the Web class and my mother who has a blood analysis lab. </p>
-            <p>- Frontend: we were not allowed any APIs or to use any template, so it's plain HTML / CSS (with flexbox and grid) / JS written from 0. </p>
-            <p>- Backend: node.js </p>
-            <p>- Looks fairly good, has things like modal boxes, regex field validation, local storage, lots of AJAX and JS events, pages generated from templates etc</p>
-            <p>- Completely responsive on mostly any resolution!</p>
-            <p>- Can be found <a href="https://github.com/PredaMihaiDragos/Facultate/tree/master/Anul%201/TW/Proiect">here</a></p>
-          </li>
-      </ul>
+      <section>
+        <h2>My projects</h2>
+            <p>I have worked on many projects, most recent two are:</p>
+            <ul>
+                <li>
+                    <b>QuizGame</b> 
+                    <p>- A project for the OOP class, made with C++20 using latest features and a looot of OOP.</p>
+                    <p>- Three types of questions (MultipleChoice, Word and Number) you have to answer.</p>
+                    <p>- You can also add questions to the game.</p>
+                    <p>- Can be found <a href="https://github.com/PredaMihaiDragos/Facultate/tree/master/Anul%201/POO/QuizGame">here</a></p>
+                </li>
+                <li>
+                    <b>Website for blood analysis lab</b>
+                    <p>- A project for both the Web class and my mother who has a blood analysis lab. </p>
+                    <p>- Frontend: we were not allowed any APIs or to use any template, so it's plain HTML / CSS (with flexbox and grid) / JS written from 0. </p>
+                    <p>- Backend: node.js </p>
+                    <p>- Looks fairly good, has things like modal boxes, regex field validation, local storage, lots of AJAX and JS events, pages generated from templates etc</p>
+                    <p>- Completely responsive on mostly any resolution!</p>
+                    <p>- Can be found <a href="https://github.com/PredaMihaiDragos/Facultate/tree/master/Anul%201/TW/Proiect">here</a></p>
+                </li>
+            </ul>
+        </h2>
+      </section>
 
-      <p>My LinkedIn: <a href="https://www.linkedin.com/in/mihai-dragos-preda/">Here</a></p>
-      <p>My Github: <a href="https://github.com/PredaMihaiDragos">Here</a></p>
+      <section>
+          <h2>Accounts</h2>
+            <p>My LinkedIn: <a href="https://www.linkedin.com/in/mihai-dragos-preda/">Here</a></p>
+            <p>My Github: <a href="https://github.com/PredaMihaiDragos">Here</a></p>
+      </section>
 
-      <img class="photo-of-me" src="images/photo_of_me.jpeg" alt="Photo of me">
-      <p>This is my portfolio.</p>
+      <section>
+          <h2>Images</h2>
+            <img class="photo-of-me" src="images/photo_of_me.jpeg" alt="Photo of me">
+      </section>
 
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomFact()">Hello</button>
-      <div id="fact-container"></div>
+      <aside>
+            <h2>Random message</h2>
+            <p>Click here to get a random message:</p>
+            <button onclick="addRandomFact()">Hello</button>
+            <div id="fact-container"></div>
+      </aside>
     </div>
   </body>
 </html>
