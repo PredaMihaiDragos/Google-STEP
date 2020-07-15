@@ -35,3 +35,34 @@ header {
 .accounts {
     font-size:40px;
 }
+
+nav {
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    background-color:#4285F4;
+    width:99vw;
+    height:70px;
+    z-index:1;
+}
+
+.nav-button-link {
+    transition: color 0.3s ease;
+    padding:2vw;
+    cursor:pointer;
+    font:20px/1.6 "Muli", Arial;
+    font-weight:1000;
+    color:white;
+    text-decoration: none;
+}
+
+.nav-button-link:hover {
+    transition: color 0.3s ease;
+    color:rgb(0, 35, 68);
+}
+
+.fixedNav {
+    position:fixed;
+    top:0;
+}

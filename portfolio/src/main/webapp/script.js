@@ -26,3 +26,33 @@ function addRandomFact() {
   const factContainer = document.getElementById('fact-container');
   factContainer.innerText = fact;
 }
+
+
+/**
+ * Callback when window is scrolled
+ */
+window.onscroll = function() { OnWindowScrolled(); }
+function OnWindowScrolled() {
+    const headerHeight = document.getElementById("header").offsetHeight;
+    const scrolledY = window.pageYOffset;
+    const navBar = document.getElementById("navbar");
+    const content = document.getElementById("content");
+    
+    if(scrolledY >= headerHeight) {
+        navBar.classList.add("fixedNav");
+        content.style.paddingTop = navBar.offsetHeight + "px";
+    }
+    else {
+        navBar.classList.remove("fixedNav");
+        content.style.paddingTop = 0;
+    }
+}
+
+
+/**
+ * Function to call when page loaded to init javascript stuff
+ */
+function init() {
+    // Simulate scroll event to position elements right
+    OnWindowScrolled();
+}
