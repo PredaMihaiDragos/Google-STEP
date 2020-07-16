@@ -5,6 +5,7 @@
     <title>Mihai Preda's portfolio</title>
     <link rel="stylesheet" href="style.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="script.js"></script>
     <script src="https://kit.fontawesome.com/fe29c7813b.js" crossorigin="anonymous"></script>
   </head>
@@ -34,10 +35,13 @@
       </header>
       <nav id="navbar">
           <span class="nav-button">
-              <a class="nav-button-link" href="#section-about">About</a>
+              <a class="nav-button-link" onclick="scrollToElement('header')">Home</a>
           </span>
           <span class="nav-button">
-              <a class="nav-button-link" href="#section-projects">Projects</a>
+              <a class="nav-button-link" onclick="scrollToElement('section-about')">About</a>
+          </span>
+          <span class="nav-button">
+              <a class="nav-button-link" onclick="scrollToElement('section-projects')">Projects</a>
           </span>
       </nav>
     <div id="content">

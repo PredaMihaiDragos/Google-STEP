@@ -56,3 +56,14 @@ function init() {
     // Simulate scroll event to position elements right
     OnWindowScrolled();
 }
+
+/**
+ * Function that scrolls to an element taking into account the nav offset
+ */
+function scrollToElement(elementId, duration = 300)
+{
+    const navOffset = document.getElementById("navbar").offsetHeight;
+    $('html, body').animate({
+                    scrollTop: $('#' + elementId).offset().top - navOffset
+                }, duration);
+}
