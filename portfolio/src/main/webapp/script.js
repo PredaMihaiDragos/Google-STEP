@@ -17,7 +17,7 @@
  */
 function addRandomFact() {
   const facts =
-      ['My last name is Preda!', 'I\'m from Romania!', 'I like programming！', 'My hobby is traveling!', 'When I was a kid, I wanted to be a truck driver!'];
+      ['My last name is Preda!', 'I\'m from Romania!', 'I like programming!', 'My hobby is traveling!', 'When I was a kid, I wanted to be a truck driver!'];
 
   // Pick a random fact.
   const fact = facts[Math.floor(Math.random() * facts.length)];
