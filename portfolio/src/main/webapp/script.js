@@ -50,8 +50,10 @@ function OnWindowScrolled() {
 
 
 /**
- * Function to call when page loaded to init javascript stuff
+ * Callback when window finished loading
+ * Used to init javascript stuff
  */
+window.onload = function() { init(); }
 function init() {
     // Simulate scroll event to position elements right
     OnWindowScrolled();
