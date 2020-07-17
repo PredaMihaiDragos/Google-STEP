@@ -31,7 +31,7 @@ function addRandomFact() {
 /**
  * Callback when window is scrolled
  */
-window.onscroll = function() { OnWindowScrolled(); }
+window.onscroll = OnWindowScrolled;
 function OnWindowScrolled() {
     const headerHeight = document.getElementById("header").offsetHeight;
     const scrolledY = window.pageYOffset;
@@ -53,7 +53,7 @@ function OnWindowScrolled() {
  * Callback when window finished loading
  * Used to init javascript stuff
  */
-window.onload = function() { init(); }
+window.onload = init;
 function init() {
     // Simulate scroll event to position elements right
     OnWindowScrolled();
