@@ -13,16 +13,59 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Adds a random fact to the page.
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+function addRandomFact() {
+  const facts =
+      ['My last name is Preda!', 'I\'m from Romania!', 'I like programming!', 'My hobby is traveling!', 'When I was a kid, I wanted to be a truck driver!'];
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  // Pick a random fact.
+  const fact = facts[Math.floor(Math.random() * facts.length)];
 
   // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  const factContainer = document.getElementById('fact-container');
+  factContainer.innerText = fact;
+}
+
+
+/**
+ * Callback when window is scrolled
+ */
+window.onscroll = OnWindowScrolled;
+function OnWindowScrolled() {
+    const headerHeight = document.getElementById("header").offsetHeight;
+    const scrolledY = window.pageYOffset;
+    const navBar = document.getElementById("navbar");
+    const content = document.getElementById("content");
+    
+    if(scrolledY >= headerHeight) {
+        navBar.classList.add("fixedNav");
+        content.style.paddingTop = navBar.offsetHeight + "px";
+    }
+    else {
+        navBar.classList.remove("fixedNav");
+        content.style.paddingTop = 0;
+    }
+}
+
+
+/**
+ * Callback when window finished loading
+ * Used to init javascript stuff
+ */
+window.onload = init;
+function init() {
+    // Simulate scroll event to position elements right
+    OnWindowScrolled();
+}
+
+/**
+ * Function that scrolls to an element taking into account the nav offset
+ */
+function scrollToElement(elementId, duration = 300)
+{
+    const navOffset = document.getElementById("navbar").offsetHeight;
+    $('html, body').animate({
+                    scrollTop: $('#' + elementId).offset().top - navOffset
+                }, duration);
 }
