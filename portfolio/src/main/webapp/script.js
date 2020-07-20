@@ -58,8 +58,10 @@ function init() {
     // Simulate scroll event to position elements right
     OnWindowScrolled();
 
-    // Load stuff dynamically
-    LoadGreeting();
+    // Load greeting-container content
+    fetch('/data').then(response => response.text()).then((quote) => {
+        document.getElementById('greeting-container').innerHTML = quote;
+    });
 }
 
 /**
@@ -71,13 +73,4 @@ function scrollToElement(elementId, duration = 300)
     $('html, body').animate({
                     scrollTop: $('#' + elementId).offset().top - navOffset
                 }, duration);
-}
-
-/** 
- * Function that loads greeting-container content
- */
-function LoadGreeting() {
-    fetch('/data').then(response => response.text()).then((quote) => {
-        document.getElementById('greeting-container').innerHTML = quote;
-    });
 }
