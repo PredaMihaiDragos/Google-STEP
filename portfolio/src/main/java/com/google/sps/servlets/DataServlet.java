@@ -35,19 +35,11 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Convert the comments to JSON
-    String json = getCommentsJson();
+    Gson gson = new Gson();
+    String json = gson.toJson(comments);
 
     // Send the JSON as the response
     response.setContentType("application/json;");
     response.getWriter().println(json);
-  }
-
-  /**
-   * Converts comments variable into a JSON string using the Gson library
-   */
-  private String getCommentsJson() {
-    Gson gson = new Gson();
-    String json = gson.toJson(comments);
-    return json;
   }
 }

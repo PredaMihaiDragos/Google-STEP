@@ -22,14 +22,13 @@ public final class Comment {
   private final String message;
   private final Date addedDate;
 
-  public Comment(String message) {
-    this.message = message;
-    this.addedDate = new Date();
-  }
-
   public Comment(String message, Date addedDate) {
     this.message = message;
     this.addedDate = addedDate;
+  }
+
+  public Comment(String message) {
+    this(message, new Date());
   }
 
   public String getMessage() {
