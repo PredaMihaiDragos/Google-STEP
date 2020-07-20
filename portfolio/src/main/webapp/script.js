@@ -57,6 +57,8 @@ window.onload = init;
 function init() {
     // Simulate scroll event to position elements right
     OnWindowScrolled();
+
+    LoadComments();
 }
 
 /**
@@ -68,4 +70,28 @@ function scrollToElement(elementId, duration = 300)
     $('html, body').animate({
                     scrollTop: $('#' + elementId).offset().top - navOffset
                 }, duration);
+}
+
+/**
+ * Function that loads comments
+ */
+function LoadComments() {
+    fetch('/data').then(response => response.json()).then((comments) => {
+        const commentsElement = document.getElementById('comments');
+        commentsElement.innerHTML = '';
+        for(let comment of comments) {
+            commentsElement.appendChild(
+                createListElement('Message: ' + comment.message +
+                                  ', posted on: ' + comment.addedDate));
+        }
+    });
+}
+
+/** 
+ * Function that creates an <li> element containing text
+ */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
 }
