@@ -76,6 +76,7 @@ function scrollToElement(elementId, duration = 300)
  * Function that loads comments
  */
 function LoadComments() {
+    // Make a GET request to "/data" and parse the response json into "comments" array
     fetch('/data').then(response => response.json()).then((comments) => {
         const commentsElement = document.getElementById('comments');
         commentsElement.innerHTML = '';
