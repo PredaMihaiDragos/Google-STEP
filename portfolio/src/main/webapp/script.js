@@ -57,6 +57,11 @@ window.onload = init;
 function init() {
     // Simulate scroll event to position elements right
     OnWindowScrolled();
+
+    // Load greeting-container content
+    fetch('/data').then(response => response.text()).then((quote) => {
+        document.getElementById('greeting-container').innerHTML = quote;
+    });
 }
 
 /**
