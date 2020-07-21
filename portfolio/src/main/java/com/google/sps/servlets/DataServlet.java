@@ -28,9 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  private ArrayList<Comment> comments = 
-    new ArrayList<Comment>(
-        Arrays.asList(new Comment("Comm1"), new Comment("Comm2"), new Comment("Comm3")));
+  private ArrayList<Comment> comments = new ArrayList<Comment>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -41,5 +39,12 @@ public class DataServlet extends HttpServlet {
     // Send the JSON as the response
     response.setContentType("application/json;");
     response.getWriter().println(json);
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String message = request.getParameter("comment-message");
+    comments.add(new Comment(message));
+    response.sendRedirect("/index.html");
   }
 }
