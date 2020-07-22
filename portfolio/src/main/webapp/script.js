@@ -58,6 +58,7 @@ function OnCommentsContainerScrolled() {
     // Get the comments container element
     const commentsElement = document.getElementById('comments-container');
 
+    // If commentsElement was scrolled to the top, load more comments
     if(commentsElement.scrollTop === 0) {
         LoadComments();
     }

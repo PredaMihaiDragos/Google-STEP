@@ -36,6 +36,14 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  // Maximum comments that can be requested
+  private static final int COMMENTS_REQUEST_LIMIT = 10000;
+
+  /** 
+   * Method that handles the GET requests to "/data" path
+   * Parameter "max-comments" specifies the maximum number of comments to return
+   * Returns a JSON array of comments ordered by addedDate descending
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the request
@@ -47,6 +55,11 @@ public class DataServlet extends HttpServlet {
       maxComments = Integer.parseInt(maxCommentsString);
     } catch (NumberFormatException e) {
       maxComments = Integer.MAX_VALUE;
+    }
+
+    // If the request exceeds the comments limit, bring it down
+    if(maxComments > COMMENTS_REQUEST_LIMIT) {
+        maxComments = COMMENTS_REQUEST_LIMIT;
     }
 
     // Load comments from datastore
