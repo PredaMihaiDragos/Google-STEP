@@ -59,6 +59,8 @@ function OnCommentsContainerScrolled() {
     const commentsElement = document.getElementById('comments-container');
 
     // If commentsElement was scrolled to the top, load more comments
+    // It is initially scrolled to bottom, because of its flex-direction:column-reverse
+    // After more comments are loaded, it is no longer scrolled to top
     if(commentsElement.scrollTop === 0) {
         LoadComments();
     }
