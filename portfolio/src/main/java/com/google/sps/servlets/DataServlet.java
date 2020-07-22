@@ -62,6 +62,11 @@ public class DataServlet extends HttpServlet {
         maxComments = COMMENTS_REQUEST_LIMIT;
     }
 
+    // Make sure maxComments is not negative
+    if(maxComments < 0) {
+        maxComments = 0;
+    }
+
     // Load comments from datastore
     Query query = new Query("Comment").addSort("addedDate", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
