@@ -65,6 +65,8 @@ nav {
 
 #comments-container {
     position:relative;
+    display:flex;
+    flex-direction:column-reverse;
     max-height:20vh;
     overflow-y:scroll;
     padding:5px;
