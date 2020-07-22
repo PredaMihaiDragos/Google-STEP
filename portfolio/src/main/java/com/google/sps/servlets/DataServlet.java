@@ -19,6 +19,8 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.sps.data.Comment;
 import com.google.gson.Gson;
 import java.util.Date;
@@ -36,14 +38,25 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the input from the request
+    String maxCommentsString = request.getParameter("max-comments");
+
+    // Convert the input to an int or Integer.MAX_VALUE
+    int maxComments;
+    try {
+      maxComments = Integer.parseInt(maxCommentsString);
+    } catch (NumberFormatException e) {
+      maxComments = Integer.MAX_VALUE;
+    }
+
     // Load comments from datastore
-    Query query = new Query("Comment");
+    Query query = new Query("Comment").addSort("addedDate", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
     // Store comments in an array
     ArrayList<Comment> comments = new ArrayList<>();
-    for (Entity entity : results.asIterable()) {
+    for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(maxComments))) {
       String message = (String) entity.getProperty("message");
       Date addedDate = (Date) entity.getProperty("addedDate");
 
