@@ -110,7 +110,8 @@ function LoadComments() {
         for(let comment of comments) {
             commentsElement.appendChild(
                 createListElement('Message: ' + comment.message +
-                                  ', posted on: ' + comment.addedDate));
+                                  ', posted by ' + comment.addedBy +
+                                  ', on: ' + comment.addedDate));
         }
         LoadComments.commentsLoaded = comments.length;
     });
