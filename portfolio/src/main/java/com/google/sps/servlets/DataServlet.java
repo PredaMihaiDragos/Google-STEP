@@ -17,6 +17,8 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -115,5 +117,29 @@ public class DataServlet extends HttpServlet {
     datastore.put(commentEntity);
 
     response.sendRedirect("/index.html");
+  }
+
+  /**
+   * Method to handle the DELETE requests to "/data" path
+   * Receives "comment-id" parameter
+   * Deletes a comment from the database
+   */
+  @Override
+  public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the input from the request
+    String idString = request.getParameter("comment-id");
+
+    // Convert the input to a long or return
+    long id;
+    try {
+      id = Long.parseLong(idString);
+    } catch (NumberFormatException e) {
+      return;
+    }
+
+    // Delete the comment with id
+    Key commentEntityKey = KeyFactory.createKey("Comment", id);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.delete(commentEntityKey);
   }
 }
