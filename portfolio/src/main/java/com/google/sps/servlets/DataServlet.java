@@ -19,6 +19,8 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.sps.data.Comment;
 import com.google.gson.Gson;
 import java.util.Date;
@@ -34,16 +36,45 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  // Maximum comments that can be requested
+  private static final int COMMENTS_REQUEST_LIMIT = 10000;
+
+  /** 
+   * Method that handles the GET requests to "/data" path
+   * Parameter "max-comments" specifies the maximum number of comments to return
+   * Returns a JSON array of comments ordered by addedDate descending
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the input from the request
+    String maxCommentsString = request.getParameter("max-comments");
+
+    // Convert the input to an int or Integer.MAX_VALUE
+    int maxComments;
+    try {
+      maxComments = Integer.parseInt(maxCommentsString);
+    } catch (NumberFormatException e) {
+      maxComments = Integer.MAX_VALUE;
+    }
+
+    // If the request exceeds the comments limit, bring it down
+    if(maxComments > COMMENTS_REQUEST_LIMIT) {
+        maxComments = COMMENTS_REQUEST_LIMIT;
+    }
+
+    // Make sure maxComments is not negative
+    if(maxComments < 0) {
+        maxComments = 0;
+    }
+
     // Load comments from datastore
-    Query query = new Query("Comment");
+    Query query = new Query("Comment").addSort("addedDate", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
     // Store comments in an array
     ArrayList<Comment> comments = new ArrayList<>();
-    for (Entity entity : results.asIterable()) {
+    for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(maxComments))) {
       String message = (String) entity.getProperty("message");
       Date addedDate = (Date) entity.getProperty("addedDate");
 

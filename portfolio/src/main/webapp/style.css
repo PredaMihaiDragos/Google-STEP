@@ -6,10 +6,6 @@
   width: 650px;
 }
 
-#greeting-container {
-  margin-top: 20px;
-}
-
 header {
     position:relative;
     display:flex;
@@ -65,4 +61,15 @@ nav {
 .fixedNav {
     position:fixed;
     top:0;
+}
+
+#comments-container {
+    position:relative;
+    display:flex;
+    flex-direction:column-reverse;
+    max-height:20vh;
+    overflow-y:scroll;
+    padding:5px;
+    margin:10px;
+    border:solid;
 }

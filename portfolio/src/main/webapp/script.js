@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Global constants
+const COMMENTS_PER_LOAD = 10;
+
 /**
  * Adds a random fact to the page.
  */
@@ -48,6 +51,21 @@ function OnWindowScrolled() {
     }
 }
 
+/**
+ * Callback when comments-container is scrolled
+ */
+function OnCommentsContainerScrolled() {
+    // Get the comments container element
+    const commentsElement = document.getElementById('comments-container');
+
+    // If commentsElement was scrolled to the top, load more comments
+    // It is initially scrolled to bottom, because of its flex-direction:column-reverse
+    // After more comments are loaded, it is no longer scrolled to top
+    if(commentsElement.scrollTop === 0) {
+        LoadComments();
+    }
+}
+
 
 /**
  * Callback when window finished loading
@@ -80,15 +98,25 @@ function scrollToElement(elementId, duration = 300)
  * Function that loads comments
  */
 function LoadComments() {
+    // Create static commentsLoaded variable, if not exists
+    if(typeof LoadComments.commentsLoaded == 'undefined') {
+        LoadComments.commentsLoaded = 0;
+    }
+
     // Make a GET request to "/data" and parse the response json into "comments" array
-    fetch('/data').then(response => response.json()).then((comments) => {
-        const commentsElement = document.getElementById('comments');
+    const fetchURL = '/data?max-comments=' + (LoadComments.commentsLoaded + COMMENTS_PER_LOAD);
+    fetch(fetchURL).then(response => response.json()).then((comments) => {
+        // Get the comments container element
+        const commentsElement = document.getElementById('comments-container');
+
+        // Add all comments in the comments container
         commentsElement.innerHTML = '';
         for(let comment of comments) {
             commentsElement.appendChild(
                 createListElement('Message: ' + comment.message +
                                   ', posted on: ' + comment.addedDate));
         }
+        LoadComments.commentsLoaded = comments.length;
     });
 }
 
