@@ -77,10 +77,6 @@ function init() {
     OnWindowScrolled();
 
     LoadComments();
-    // Load greeting-container content
-    fetch('/data').then(response => response.text()).then((quote) => {
-        document.getElementById('greeting-container').innerHTML = quote;
-    });
 }
 
 /**
