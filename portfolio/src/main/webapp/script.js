@@ -161,18 +161,51 @@ function initMap() {
   // Add markers
   const homeAlexandriaMarker = new google.maps.Marker({
     position: homeAlexandriaCoords, 
-    map: map
+    map: map,
+    label: "H",
+    title: "Home in Alexandria"
   });
   const homeBucharestMarker = new google.maps.Marker({
     position: homeBucharestCoords, 
-    map: map
+    map: map,
+    label: "H",
+    title: "Home in Bucharest"
   });
   const universityMarker = new google.maps.Marker({
     position: universityCoords, 
-    map: map
+    map: map,
+    label: "U",
+    title: "University"
   });
   const workMarker = new google.maps.Marker({
     position: workCoords, 
-    map: map
+    map: map,
+    label: "W",
+    title: "Work"
+  });
+
+  // Add info windows to markers
+  addInfoWindow(map, homeAlexandriaMarker, "This is where I live in Alexandria");
+  addInfoWindow(map, homeBucharestMarker, "This is where I live in Bucharest");
+  addInfoWindow(map, universityMarker, "<h3>University of Bucharest</h3>" + 
+                                       "<h4>Faculty of Mathematics and Informatics</h4>" +
+                                       "<p>This is where I am studying now</p>");
+  addInfoWindow(map, workMarker, "<h3>Google Romania</h3>" + 
+                                 "<h4>Job name: STEP Intern</h4>" +
+                                 "<p>This is where I am working now</p>");
+}
+
+/**
+ * Function that adds an info window to a marker
+ */
+function addInfoWindow(map, marker, text) {
+  // Create the info window
+  const infoWindow = new google.maps.InfoWindow({
+    content: text
+  });
+
+  // Open the info window when marker is clicked
+  marker.addListener('click', function() {
+    infoWindow.open(map, marker);
   });
 }
