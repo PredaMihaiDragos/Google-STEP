@@ -76,9 +76,10 @@ public class DataServlet extends HttpServlet {
     ArrayList<Comment> comments = new ArrayList<>();
     for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(maxComments))) {
       String message = (String) entity.getProperty("message");
+      String addedBy = (String) entity.getProperty("addedBy");
       Date addedDate = (Date) entity.getProperty("addedDate");
 
-      comments.add(new Comment(message, addedDate));
+      comments.add(new Comment(message, addedBy, addedDate));
     }
 
     // Convert the comments to JSON
@@ -90,14 +91,23 @@ public class DataServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
+  /** 
+   * Method that handles the POST requests to "/data" path
+   * Receives "comment-message" and "comment-addedBy" parameters
+   * Creates a comment and saves it to database
+   * Returns a redirect to "/index.html"
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the input from the request into a Comment variable
     String message = request.getParameter("comment-message");
-    Comment comment = new Comment(message);
+    String addedBy = request.getParameter("comment-addedBy");
+    Comment comment = new Comment(message, addedBy);
 
     // Create the commentEntity
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("message", comment.getMessage());
+    commentEntity.setProperty("addedBy", comment.getAddedBy());
     commentEntity.setProperty("addedDate", comment.getAddedDate());
 
     // Save commentEntity in datastore

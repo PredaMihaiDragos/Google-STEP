@@ -20,19 +20,25 @@ import java.util.Date;
 public final class Comment {
 
   private final String message;
+  private final String addedBy;
   private final Date addedDate;
 
-  public Comment(String message, Date addedDate) {
+  public Comment(String message, String addedBy, Date addedDate) {
     this.message = message;
+    this.addedBy = addedBy;
     this.addedDate = addedDate;
   }
 
-  public Comment(String message) {
-    this(message, new Date());
+  public Comment(String message, String addedBy) {
+    this(message, addedBy, new Date());
   }
 
   public String getMessage() {
     return message;
+  }
+
+  public String getAddedBy() {
+      return addedBy;
   }
 
   public Date getAddedDate() {
