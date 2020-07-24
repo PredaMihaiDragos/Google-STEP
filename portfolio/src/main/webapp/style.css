@@ -73,3 +73,7 @@ nav {
     margin:10px;
     border:solid;
 }
+
+#map {
+  height: 50vh;
+}

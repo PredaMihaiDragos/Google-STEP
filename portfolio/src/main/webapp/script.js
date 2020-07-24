@@ -15,6 +15,9 @@
 // Global constants
 const COMMENTS_PER_LOAD = 10;
 
+// Global variables
+let map;
+
 /**
  * Adds a random fact to the page.
  */
@@ -80,6 +83,16 @@ function init() {
     // Load greeting-container content
     fetch('/data').then(response => response.text()).then((quote) => {
         document.getElementById('greeting-container').innerHTML = quote;
+    });
+
+    // Init the Google Maps map
+    map = new google.maps.Map(document.getElementById("map"), {
+      // Center it to my home
+      center: { 
+          lat: 43.975320, 
+          lng: 25.316876 
+          },
+      zoom: 12
     });
 }
 
