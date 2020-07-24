@@ -45,7 +45,6 @@
           </span>
       </nav>
     <div id="content">
-      <span id="greeting-container"></span>
 
       <main id="section-about">
         <h2>About me</h2>
@@ -84,6 +83,7 @@
           <h2>Comments</h2>
           <div id="comments-container" onscroll="OnCommentsContainerScrolled()"></div>
           <form action="/data" method="POST">
+            <input type="text" name="comment-addedBy" placeholder="Your name">
             <input type="text" name="comment-message" placeholder="Add a comment">
             <input type="submit" />
           </form>
