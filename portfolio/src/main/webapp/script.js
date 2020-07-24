@@ -77,10 +77,6 @@ function init() {
     onWindowScrolled();
 
     loadComments();
-    // Load greeting-container content
-    fetch('/data').then(response => response.text()).then((quote) => {
-        document.getElementById('greeting-container').innerHTML = quote;
-    });
     initMap();
 }
 
@@ -115,7 +111,8 @@ function loadComments() {
         for(let comment of comments) {
             commentsElement.appendChild(
                 createListElement('Message: ' + comment.message +
-                                  ', posted on: ' + comment.addedDate));
+                                  ', posted by ' + comment.addedBy +
+                                  ', on: ' + comment.addedDate));
         }
         loadComments.commentsLoaded = comments.length;
     });
