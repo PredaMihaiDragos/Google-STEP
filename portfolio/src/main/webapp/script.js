@@ -15,9 +15,6 @@
 // Global constants
 const COMMENTS_PER_LOAD = 10;
 
-// Global variables
-let map;
-
 /**
  * Adds a random fact to the page.
  */
@@ -84,16 +81,7 @@ function init() {
     fetch('/data').then(response => response.text()).then((quote) => {
         document.getElementById('greeting-container').innerHTML = quote;
     });
-
-    // Init the Google Maps map
-    map = new google.maps.Map(document.getElementById("map"), {
-      // Center it to my home
-      center: { 
-          lat: 43.975320, 
-          lng: 25.316876 
-          },
-      zoom: 12
-    });
+    initMap();
 }
 
 /**
@@ -140,4 +128,51 @@ function createListElement(text) {
   const liElement = document.createElement('li');
   liElement.innerText = text;
   return liElement;
+}
+
+/**
+ * Function that inits the Google Maps map
+ */
+function initMap() {
+  // Set locations coordinates
+  const homeAlexandriaCoords = { 
+    lat: 43.975320, 
+    lng: 25.316876 
+  };
+  const homeBucharestCoords = {
+    lat: 44.457789,
+    lng: 26.045081
+  };
+  const universityCoords = {
+    lat: 44.435556,
+    lng: 26.099669
+  };
+  const workCoords = {
+    lat: 44.441150,
+    lng: 26.100928
+  };
+
+  // Create the map
+  const map = new google.maps.Map(document.getElementById("map"), {
+    center: homeAlexandriaCoords,
+    zoom: 12
+  });
+
+  // Add markers
+  const homeAlexandriaMarker = new google.maps.Marker({
+    position: homeAlexandriaCoords, 
+    map: map
+  });
+  const homeBucharestMarker = new google.maps.Marker({
+    position: homeBucharestCoords, 
+    map: map
+  });
+  const universityMarker = new google.maps.Marker({
+    position: universityCoords, 
+    map: map
+  });
+  const workMarker = new google.maps.Marker({
+    position: workCoords, 
+    map: map
+  });
 }
