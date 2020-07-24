@@ -34,8 +34,8 @@ function addRandomFact() {
 /**
  * Callback when window is scrolled
  */
-window.onscroll = OnWindowScrolled;
-function OnWindowScrolled() {
+window.onscroll = onWindowScrolled;
+function onWindowScrolled() {
     const headerHeight = document.getElementById("header").offsetHeight;
     const scrolledY = window.pageYOffset;
     const navBar = document.getElementById("navbar");
@@ -54,7 +54,7 @@ function OnWindowScrolled() {
 /**
  * Callback when comments-container is scrolled
  */
-function OnCommentsContainerScrolled() {
+function onCommentsContainerScrolled() {
     // Get the comments container element
     const commentsElement = document.getElementById('comments-container');
 
@@ -62,7 +62,7 @@ function OnCommentsContainerScrolled() {
     // It is initially scrolled to bottom, because of its flex-direction:column-reverse
     // After more comments are loaded, it is no longer scrolled to top
     if(commentsElement.scrollTop === 0) {
-        LoadComments();
+        loadComments();
     }
 }
 
@@ -74,9 +74,9 @@ function OnCommentsContainerScrolled() {
 window.onload = init;
 function init() {
     // Simulate scroll event to position elements right
-    OnWindowScrolled();
+    onWindowScrolled();
 
-    LoadComments();
+    loadComments();
     // Load greeting-container content
     fetch('/data').then(response => response.text()).then((quote) => {
         document.getElementById('greeting-container').innerHTML = quote;
@@ -98,14 +98,14 @@ function scrollToElement(elementId, duration = 300)
 /**
  * Function that loads comments
  */
-function LoadComments() {
+function loadComments() {
     // Create static commentsLoaded variable, if not exists
-    if(typeof LoadComments.commentsLoaded == 'undefined') {
-        LoadComments.commentsLoaded = 0;
+    if(typeof loadComments.commentsLoaded == 'undefined') {
+        loadComments.commentsLoaded = 0;
     }
 
     // Make a GET request to "/data" and parse the response json into "comments" array
-    const fetchURL = '/data?max-comments=' + (LoadComments.commentsLoaded + COMMENTS_PER_LOAD);
+    const fetchURL = '/data?max-comments=' + (loadComments.commentsLoaded + COMMENTS_PER_LOAD);
     fetch(fetchURL).then(response => response.json()).then((comments) => {
         // Get the comments container element
         const commentsElement = document.getElementById('comments-container');
@@ -117,7 +117,7 @@ function LoadComments() {
                 createListElement('Message: ' + comment.message +
                                   ', posted on: ' + comment.addedDate));
         }
-        LoadComments.commentsLoaded = comments.length;
+        loadComments.commentsLoaded = comments.length;
     });
 }
 
