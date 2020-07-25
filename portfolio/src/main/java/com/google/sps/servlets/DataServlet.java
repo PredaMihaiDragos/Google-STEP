@@ -17,6 +17,8 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -75,11 +77,12 @@ public class DataServlet extends HttpServlet {
     // Store comments in an array
     ArrayList<Comment> comments = new ArrayList<>();
     for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(maxComments))) {
+      long id = entity.getKey().getId();
       String message = (String) entity.getProperty("message");
       String addedBy = (String) entity.getProperty("addedBy");
       Date addedDate = (Date) entity.getProperty("addedDate");
 
-      comments.add(new Comment(message, addedBy, addedDate));
+      comments.add(new Comment(id, message, addedBy, addedDate));
     }
 
     // Convert the comments to JSON
@@ -99,21 +102,44 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Get the input from the request into a Comment variable
+    // Get the input from the request
     String message = request.getParameter("comment-message");
     String addedBy = request.getParameter("comment-addedBy");
-    Comment comment = new Comment(message, addedBy);
 
     // Create the commentEntity
     Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("message", comment.getMessage());
-    commentEntity.setProperty("addedBy", comment.getAddedBy());
-    commentEntity.setProperty("addedDate", comment.getAddedDate());
+    commentEntity.setProperty("message", message);
+    commentEntity.setProperty("addedBy", addedBy);
+    commentEntity.setProperty("addedDate", new Date());
 
     // Save commentEntity in datastore
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
 
     response.sendRedirect("/index.html");
+  }
+
+  /**
+   * Method to handle the DELETE requests to "/data" path
+   * Receives "comment-id" parameter
+   * Deletes a comment from the database
+   */
+  @Override
+  public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the input from the request
+    String idString = request.getParameter("comment-id");
+
+    // Convert the input to a long or return
+    long id;
+    try {
+      id = Long.parseLong(idString);
+    } catch (NumberFormatException e) {
+      return;
+    }
+
+    // Delete the comment with id
+    Key commentEntityKey = KeyFactory.createKey("Comment", id);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.delete(commentEntityKey);
   }
 }

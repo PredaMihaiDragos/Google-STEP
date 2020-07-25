@@ -91,27 +91,42 @@ function scrollToElement(elementId, duration = 300)
 }
 
 /**
- * Function that loads comments
+ * Function that loads more comments
+ * commentsToLoad parameter specifies how many more comments to load
+ * If commentsToLoad is 0, it will reload the same number of comments
  */
-function LoadComments() {
+function LoadComments(commentsToLoad = COMMENTS_PER_LOAD) {
     // Create static commentsLoaded variable, if not exists
     if(typeof LoadComments.commentsLoaded == 'undefined') {
         LoadComments.commentsLoaded = 0;
     }
 
     // Make a GET request to "/data" and parse the response json into "comments" array
-    const fetchURL = '/data?max-comments=' + (LoadComments.commentsLoaded + COMMENTS_PER_LOAD);
+    const fetchURL = '/data?max-comments=' + (LoadComments.commentsLoaded + commentsToLoad);
     fetch(fetchURL).then(response => response.json()).then((comments) => {
         // Get the comments container element
-        const commentsElement = document.getElementById('comments-container');
+        const commentsContainer = document.getElementById('comments-container');
 
         // Add all comments in the comments container
-        commentsElement.innerHTML = '';
+        commentsContainer.innerHTML = '';
         for(let comment of comments) {
-            commentsElement.appendChild(
-                createListElement('Message: ' + comment.message +
-                                  ', posted by ' + comment.addedBy +
-                                  ', on: ' + comment.addedDate));
+            // Create the list element
+            const commentListElement = createListElement('Message: ' + comment.message +
+                                                         ', posted by ' + comment.addedBy +
+                                                         ', on: ' + comment.addedDate);
+
+            // Initialize the delete button element and attach it to the list element
+            const commentDeleteButton = document.createElement('button');
+            commentDeleteButton.innerHTML = "Delete";
+            commentDeleteButton.classList.add("comment-delete-button");
+            commentDeleteButton.onclick = function() {
+                deleteComment(comment.id);
+            }
+            commentListElement.appendChild(commentDeleteButton);
+
+            // Attach the comment list element to the comments container
+            commentsContainer.appendChild(commentListElement);
+                
         }
         LoadComments.commentsLoaded = comments.length;
     });
@@ -124,4 +139,18 @@ function createListElement(text) {
   const liElement = document.createElement('li');
   liElement.innerText = text;
   return liElement;
+}
+
+/**
+ * Function that deletes a comment
+ */
+function deleteComment(commentId) {
+    // Make a DELETE request to "/data" with the commentId as parameter
+    const fetchURL = '/data?comment-id=' + commentId;
+    fetch(fetchURL, {
+        method: "DELETE"
+    }).then(response => {
+        // After the comment was deleted, reload the same number of comments (0 more comments)
+        LoadComments(0);
+    });
 }
