@@ -36,17 +36,17 @@ function addRandomFact() {
  */
 window.onscroll = onWindowScrolled;
 function onWindowScrolled() {
-    const headerHeight = document.getElementById("header").offsetHeight;
+    const headerHeight = document.getElementById('header').offsetHeight;
     const scrolledY = window.pageYOffset;
-    const navBar = document.getElementById("navbar");
-    const content = document.getElementById("content");
+    const navBar = document.getElementById('navbar');
+    const content = document.getElementById('content');
     
     if(scrolledY >= headerHeight) {
-        navBar.classList.add("fixedNav");
-        content.style.paddingTop = navBar.offsetHeight + "px";
+        navBar.classList.add('fixedNav');
+        content.style.paddingTop = navBar.offsetHeight + 'px';
     }
     else {
-        navBar.classList.remove("fixedNav");
+        navBar.classList.remove('fixedNav');
         content.style.paddingTop = 0;
     }
 }
@@ -85,7 +85,7 @@ function init() {
  */
 function scrollToElement(elementId, duration = 300)
 {
-    const navOffset = document.getElementById("navbar").offsetHeight;
+    const navOffset = document.getElementById('navbar').offsetHeight;
     $('html, body').animate({
                     scrollTop: $('#' + elementId).offset().top - navOffset
                 }, duration);
@@ -96,11 +96,11 @@ function scrollToElement(elementId, duration = 300)
  */
 function loadComments() {
     // Create static commentsLoaded variable, if not exists
-    if(typeof loadComments.commentsLoaded == 'undefined') {
+    if(typeof loadComments.commentsLoaded === 'undefined') {
         loadComments.commentsLoaded = 0;
     }
 
-    // Make a GET request to "/data" and parse the response json into "comments" array
+    // Make a GET request to '/data' and parse the response json into 'comments' array
     const fetchURL = '/data?max-comments=' + (loadComments.commentsLoaded + COMMENTS_PER_LOAD);
     fetch(fetchURL).then(response => response.json()).then((comments) => {
         // Get the comments container element
@@ -134,23 +134,23 @@ function initMap() {
   // Set locations coordinates
   const homeAlexandriaCoords = { 
     lat: 43.975320, 
-    lng: 25.316876 
+    lng: 25.316876,
   };
   const homeBucharestCoords = {
     lat: 44.457789,
-    lng: 26.045081
+    lng: 26.045081,
   };
   const universityCoords = {
     lat: 44.435556,
-    lng: 26.099669
+    lng: 26.099669,
   };
   const workCoords = {
     lat: 44.441150,
-    lng: 26.100928
+    lng: 26.100928,
   };
 
   // Create the map
-  const map = new google.maps.Map(document.getElementById("map"), {
+  const map = new google.maps.Map(document.getElementById('map'), {
     center: homeAlexandriaCoords,
     zoom: 12
   });
@@ -159,37 +159,37 @@ function initMap() {
   const homeAlexandriaMarker = new google.maps.Marker({
     position: homeAlexandriaCoords, 
     map: map,
-    label: "H",
-    title: "Home in Alexandria"
+    label: 'H',
+    title: 'Home in Alexandria',
   });
   const homeBucharestMarker = new google.maps.Marker({
     position: homeBucharestCoords, 
     map: map,
-    label: "H",
-    title: "Home in Bucharest"
+    label: 'H',
+    title: 'Home in Bucharest',
   });
   const universityMarker = new google.maps.Marker({
     position: universityCoords, 
     map: map,
-    label: "U",
-    title: "University"
+    label: 'U',
+    title: 'University',
   });
   const workMarker = new google.maps.Marker({
     position: workCoords, 
     map: map,
-    label: "W",
-    title: "Work"
+    label: 'W',
+    title: 'Work',
   });
 
   // Add info windows to markers
-  addInfoWindow(map, homeAlexandriaMarker, "This is where I live in Alexandria");
-  addInfoWindow(map, homeBucharestMarker, "This is where I live in Bucharest");
-  addInfoWindow(map, universityMarker, "<h3>University of Bucharest</h3>" + 
-                                       "<h4>Faculty of Mathematics and Informatics</h4>" +
-                                       "<p>This is where I am studying now</p>");
-  addInfoWindow(map, workMarker, "<h3>Google Romania</h3>" + 
-                                 "<h4>Job name: STEP Intern</h4>" +
-                                 "<p>This is where I am working now</p>");
+  addInfoWindow(map, homeAlexandriaMarker, 'This is where I live in Alexandria');
+  addInfoWindow(map, homeBucharestMarker, 'This is where I live in Bucharest');
+  addInfoWindow(map, universityMarker, '<h3>University of Bucharest</h3>' + 
+                                       '<h4>Faculty of Mathematics and Informatics</h4>' +
+                                       '<p>This is where I am studying now</p>');
+  addInfoWindow(map, workMarker, '<h3>Google Romania</h3>' + 
+                                 '<h4>Job name: STEP Intern</h4>' +
+                                 '<p>This is where I am working now</p>');
 }
 
 /**
