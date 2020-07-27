@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="script.js"></script>
     <script src="https://kit.fontawesome.com/fe29c7813b.js" crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAitL4E8VS2WjyxQeB3WAnRtEM6RJoM184&callback=initMap&libraries=&v=weekly" async defer></script>
   </head>
   <body>
       <header id="header">
@@ -79,9 +80,14 @@
         </h2>
       </section>
 
+      <section id="map-section">
+          <h2>Locations map</h2>
+          <div id="map"></div>
+      </section>
+
       <aside id="section-comments">
           <h2>Comments</h2>
-          <div id="comments-container" onscroll="OnCommentsContainerScrolled()"></div>
+          <div id="comments-container" onscroll="onCommentsContainerScrolled()"></div>
           <form action="/data" method="POST">
             <input type="text" name="comment-addedBy" placeholder="Your name">
             <input type="text" name="comment-message" placeholder="Add a comment">
