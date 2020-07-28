@@ -73,3 +73,11 @@ nav {
     margin:10px;
     border:solid;
 }
+
+#comment-form-container {
+    display:none;
+}
+
+#comment-form-login {
+    display:none;
+}

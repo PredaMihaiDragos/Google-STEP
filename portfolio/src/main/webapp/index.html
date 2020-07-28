@@ -82,11 +82,16 @@
       <aside id="section-comments">
           <h2>Comments</h2>
           <div id="comments-container" onscroll="OnCommentsContainerScrolled()"></div>
-          <form action="/data" method="POST">
-            <input type="text" name="comment-addedBy" placeholder="Your name">
-            <input type="text" name="comment-message" placeholder="Add a comment">
-            <input type="submit" />
-          </form>
+          <div id="comment-form-container">
+            <form action="/data" method="POST">
+                <input type="text" name="comment-addedBy" placeholder="Your name">
+                <input type="text" name="comment-message" placeholder="Add a comment">
+                <input type="submit" />
+            </form>
+          </div>
+          <div id="comment-form-login">
+              You need to <a id="login-url">login</a> to post comments!
+          </div>
       </aside>
 
       <aside>
