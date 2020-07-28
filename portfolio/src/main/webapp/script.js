@@ -177,14 +177,14 @@ function deleteComment(commentId) {
  */
 function initUserLoggedElements() {
     // Make a GET request to "/user" to get user information in user object
-    fetch("user").then(response => response.json()).then((user) => {
+    fetch('user').then(response => response.json()).then((user) => {
         if(user.loggedIn === true) {
-            const logoutLink = document.getElementById("logout-link");
+            const logoutLink = document.getElementById('logout-link');
             logoutLink.href = user.logoutURL;
             displayElements(loggedInElements);
         }
         else {
-            const loginLink = document.getElementById("login-link");
+            const loginLink = document.getElementById('login-link');
             loginLink.href = user.loginURL;
             displayElements(loggedOutElements);
         }
