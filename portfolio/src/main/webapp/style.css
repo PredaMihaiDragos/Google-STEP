@@ -58,6 +58,11 @@ nav {
     color:rgb(0, 35, 68);
 }
 
+#logout-link-container {
+    display:none;
+    margin-right:auto;
+}
+
 .fixedNav {
     position:fixed;
     top:0;

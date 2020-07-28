@@ -20,6 +20,7 @@ const COMMENTS_PER_LOAD = 10;
 // The display method of the elements that a logged in user should see
 const loggedInElements = {
     'comment-form-container' : 'inline',
+    'logout-link-container' : 'inline',
 };
 
 // The display method of the elements that a logged out user should see
@@ -178,9 +179,13 @@ function initUserLoggedElements() {
     // Make a GET request to "/user" to get user information in user object
     fetch("user").then(response => response.json()).then((user) => {
         if(user.loggedIn === true) {
+            const logoutLink = document.getElementById("logout-link");
+            logoutLink.href = user.logoutURL;
             displayElements(loggedInElements);
         }
         else {
+            const loginLink = document.getElementById("login-link");
+            loginLink.href = user.loginURL;
             displayElements(loggedOutElements);
         }
     });
