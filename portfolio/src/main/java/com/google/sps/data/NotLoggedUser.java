@@ -19,16 +19,16 @@ import com.google.sps.data.User;
 /** Class containing a not logged user. */
 public final class NotLoggedUser extends User {
   
-  private final String logoutURL;
+  private final String loginURL;
   
-  public NotLoggedUser(String logoutURL) {
+  public NotLoggedUser(String loginURL) {
     // Init User super class with loggedIn = false
     super(false);
     
-    this.logoutURL = logoutURL;
+    this.loginURL = loginURL;
   }
 
-  public String getLogoutURL() {
-    return logoutURL;
+  public String getLoginURL() {
+    return loginURL;
   }
 }
