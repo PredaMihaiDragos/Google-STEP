@@ -41,15 +41,20 @@ public final class LoggedUser extends User {
    * Method that loads user's nickname from the database based on id
    */
   private String loadNickname(String id) {
+    // Make a query to get the user entity with corresponding id from the database
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query =
         new Query("User")
             .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
+
+    // If the user doesn't have a nickname, return an empty string
     if (entity == null) {
       return "";
     }
+
+    // Return the user's nickname
     String nickname = (String) entity.getProperty("nickname");
     return nickname;
   }
