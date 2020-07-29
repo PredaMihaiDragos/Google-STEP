@@ -235,3 +235,65 @@ function deleteComment(commentId) {
         LoadComments(0);
     });
 }
+
+/**
+ * Function that returns a RGB color corresponding to the sentimentScore
+ * sentimentScore parameter is a value in [-1, 1]
+ * -1 means red, 0 means yellow, 1 means green
+ */
+function getSentimentColor(sentimentScore) {
+  // Create the colors we need
+  const red = getColor(255, 0, 0);
+  const yellow = getColor(255, 255, 0);
+  const green = getColor(0, 255, 0);
+
+  // Handle wrong input cases
+  if(sentimentScore < -1) {
+    sentimentScore = -1;
+  }
+  if(sentimentScore > 1) {
+    sentimentScore = 1;
+  }
+
+  // If sentimentScore is in [-1, 0), interpolate from red to yellow
+  if(sentimentScore < 0) {
+    // sentimentScore + 1 = sentimentScore - (-1) + 0
+    return interpolateColor(red, yellow, sentimentScore + 1);
+  }
+    
+  // Else if it is in [0, 1], interpolate from yellow to green
+  return interpolateColor(yellow, green, sentimentScore);
+}
+
+/**
+ * Function that returns an object with 'r', 'g' and 'b' properties set
+ */
+function getColor(r, g, b) {
+  return {
+    'r': r,
+    'g': g,
+    'b': b,
+  };
+}
+
+/**
+ * Function that returns an interpolated color between colorStart and colorStop
+ * colorStart, colorStop are objects with 'r', 'g', 'b' properties
+ * percentage is the interpolation value between [0, 1]
+ * 0 means colorStart, 1 means colorStop
+ */
+function interpolateColor(colorStart, colorStop, percentage) {  
+  return {
+    'r': interpolateValue(colorStart.r, colorStop.r, percentage),
+    'g': interpolateValue(colorStart.g, colorStop.g, percentage),
+    'b': interpolateValue(colorStart.b, colorStop.b, percentage),
+  };
+}
+
+/**
+ * Function that returns an interpolated value between start and stop based on percentage
+ * percentage is between [0, 1]
+ */
+function interpolateValue(start, stop, percentage) {
+  return start + percentage * (stop - start);
+}
