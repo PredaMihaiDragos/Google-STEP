@@ -251,7 +251,7 @@ function deleteComment(commentId) {
 function getSentimentColor(sentimentScore) {
   // Create the colors we need
   const red = getColor(255, 0, 0);
-  const yellow = getColor(255, 255, 0);
+  const yellow = getColor(210, 210, 0);
   const green = getColor(0, 255, 0);
 
   // Handle wrong input cases
