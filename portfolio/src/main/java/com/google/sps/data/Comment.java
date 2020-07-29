@@ -19,31 +19,42 @@ import java.util.Date;
 /** Class containing a comment. */
 public final class Comment {
 
+  // Comment variables declaration
   private final long id;
   private final String message;
   private final String addedBy;
   private final Date addedDate;
+  private final Double sentimentScore;
 
-  public Comment(long id, String message, String addedBy, Date addedDate) {
+  // Constructors
+
+  public Comment(long id, String message, String addedBy, Date addedDate, Double sentimentScore) {
     this.id = id;
     this.message = message;
     this.addedBy = addedBy;
     this.addedDate = addedDate;
+    this.sentimentScore = sentimentScore;
   }
 
-  public Comment(long id, String message, String addedBy) {
-    this(id, message, addedBy, new Date());
+  public Comment(long id, String message, String addedBy, Double sentimentScore) {
+    this(id, message, addedBy, new Date(), sentimentScore);
   }
+
+  // Getters
 
   public String getMessage() {
     return message;
   }
 
   public String getAddedBy() {
-      return addedBy;
+    return addedBy;
   }
 
   public Date getAddedDate() {
     return addedDate;
+  }
+
+  public Double getSentimentScore() {
+    return sentimentScore;
   }
 }
