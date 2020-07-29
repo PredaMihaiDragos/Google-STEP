@@ -117,6 +117,13 @@ function loadComments(commentsToLoad = COMMENTS_PER_LOAD) {
                                                          ', posted by ' + comment.addedBy +
                                                          ', on: ' + comment.addedDate);
 
+            // Set comment color based on its sentimentScore
+            const commentColor = getSentimentColor(comment.sentimentScore);
+            commentListElement.style.color = "rgb(" + commentColor.r + 
+                                                "," + commentColor.g + 
+                                                "," + commentColor.b +
+                                                ")"; 
+
             // Initialize the delete button element and attach it to the list element
             const commentDeleteButton = document.createElement('button');
             commentDeleteButton.innerHTML = "Delete";
