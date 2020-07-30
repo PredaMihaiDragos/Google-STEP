@@ -100,15 +100,15 @@ function scrollToElement(elementId, duration = 300)
  * Then load the comments in that language
  */
 function initComments() {
-  // Make a GET request to "/languages" and parse the response json into "languages" array
+  // Make a GET request to '/languages' and parse the response json into 'languages' array
   fetch('/languages').then(response => response.json()).then((languages) => {
     // Get the comments language element
     const commentsLanguageElement = document.getElementById('comments-language');
 
     // For each language create and add an option to the comments language element
     for(let language of languages) {
-      const optionElement = document.createElement("option");
-      optionElement.text = language.displayName + " (" + language.code + ")";
+      const optionElement = document.createElement('option');
+      optionElement.text = language.displayName + ' (' + language.code + ')';
       optionElement.value = language.code;
       commentsLanguageElement.add(optionElement);
     }
@@ -150,7 +150,7 @@ function reloadComments(commentsNumber = commentsLoaded) {
     fetchURL += '&comments-language-code=' + languageCode;
   }
 
-  // Make a GET request to "/data" and parse the response json into "comments" array
+  // Make a GET request to '/data' and parse the response json into 'comments' array
   fetch(fetchURL).then(response => response.json()).then((comments) => {
     // Get the comments container element
     const commentsContainer = document.getElementById('comments-container');
@@ -165,8 +165,8 @@ function reloadComments(commentsNumber = commentsLoaded) {
 
       // Initialize the delete button element and attach it to the list element
       const commentDeleteButton = document.createElement('button');
-      commentDeleteButton.innerHTML = "Delete";
-      commentDeleteButton.classList.add("comment-delete-button");
+      commentDeleteButton.innerHTML = 'Delete';
+      commentDeleteButton.classList.add('comment-delete-button');
       commentDeleteButton.onclick = function() {
         deleteComment(comment.id);
       }
@@ -282,10 +282,10 @@ function addInfoWindow(map, marker, text) {
  * Function that deletes a comment
  */
 function deleteComment(commentId) {
-    // Make a DELETE request to "/data" with the commentId as parameter
+    // Make a DELETE request to '/data' with the commentId as parameter
     const fetchURL = '/data?comment-id=' + commentId;
     fetch(fetchURL, {
-        method: "DELETE"
+        method: 'DELETE'
     }).then(response => {
         // After the comment was deleted, reload the comments
         reloadComments();
