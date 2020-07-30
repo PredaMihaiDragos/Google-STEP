@@ -113,8 +113,16 @@ function initComments() {
       commentsLanguageElement.add(optionElement);
     }
 
+    // If the user didn't choose other language before, set it to 'original'
+    if(!localStorage.commentsLanguageCode)
+      localStorage.commentsLanguageCode = 'original';
+
+    // Set the languages dropdown to the language the user chose before
+    commentsLanguageElement.value = localStorage.commentsLanguageCode;
+
     // Reload the comments every time user changes the language
     commentsLanguageElement.onchange = function() {
+      localStorage.commentsLanguageCode = getCommentsLanguageCode();
       reloadComments();
     }
 
@@ -137,9 +145,7 @@ function reloadComments(commentsNumber = commentsLoaded) {
   let fetchURL = '/data?max-comments=' + commentsNumber;
 
   // If the languageCode is not 'original', add the languageCode to the fetchURL
-  const commentsLanguageElement = document.getElementById('comments-language');
-  const languageCode = commentsLanguageElement.
-                       options[commentsLanguageElement.selectedIndex].value;
+  const languageCode = getCommentsLanguageCode();
   if(languageCode != 'original') {
     fetchURL += '&comments-language-code=' + languageCode;
   }
@@ -172,6 +178,16 @@ function reloadComments(commentsNumber = commentsLoaded) {
     }
     commentsLoaded = comments.length;
   });
+}
+
+/**
+ * Function that returns the current value of comments-language select
+ */
+function getCommentsLanguageCode() {
+  const commentsLanguageElement = document.getElementById('comments-language');
+  const languageCode = commentsLanguageElement.
+                       options[commentsLanguageElement.selectedIndex].value;
+  return languageCode;
 }
 
 /** 
