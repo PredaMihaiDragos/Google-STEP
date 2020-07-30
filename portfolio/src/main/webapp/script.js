@@ -15,6 +15,9 @@
 // Global constants
 const COMMENTS_PER_LOAD = 10;
 
+// Global variables
+let commentsLoaded = 0;
+
 /**
  * Adds a random fact to the page.
  */
@@ -94,44 +97,45 @@ function scrollToElement(elementId, duration = 300)
 /**
  * Function that loads more comments
  * commentsToLoad parameter specifies how many more comments to load
- * If commentsToLoad is 0, it will reload the same number of comments
  */
 function loadComments(commentsToLoad = COMMENTS_PER_LOAD) {
-    // Create static commentsLoaded variable, if not exists
-    if(typeof loadComments.commentsLoaded === 'undefined') {
-        loadComments.commentsLoaded = 0;
-    }
+  reloadComments(commentsLoaded + commentsToLoad);
+}
 
-    // Make a GET request to "/data" and parse the response json into "comments" array
-    const fetchURL = '/data?max-comments=' + (loadComments.commentsLoaded + commentsToLoad);
+/**
+ * Function that reloads and displays commentsNumber comments
+ */
+function reloadComments(commentsNumber = commentsLoaded) {
+  // Make a GET request to "/data" and parse the response json into "comments" array
+  const fetchURL = '/data?max-comments=' + commentsNumber;
 
-    fetch(fetchURL).then(response => response.json()).then((comments) => {
-        // Get the comments container element
-        const commentsContainer = document.getElementById('comments-container');
+  fetch(fetchURL).then(response => response.json()).then((comments) => {
+    // Get the comments container element
+    const commentsContainer = document.getElementById('comments-container');
 
-        // Add all comments in the comments container
-        commentsContainer.innerHTML = '';
-        for(let comment of comments) {
-            // Create the list element
-            const commentListElement = createListElement('Message: ' + comment.message +
-                                                         ', posted by ' + comment.addedBy +
-                                                         ', on: ' + comment.addedDate);
+    // Add all comments in the comments container
+    commentsContainer.innerHTML = '';
+    for(let comment of comments) {
+      // Create the list element
+      const commentListElement = createListElement('Message: ' + comment.message +
+                                                     ', posted by ' + comment.addedBy +
+                                                     ', on: ' + comment.addedDate);
 
-            // Initialize the delete button element and attach it to the list element
-            const commentDeleteButton = document.createElement('button');
-            commentDeleteButton.innerHTML = "Delete";
-            commentDeleteButton.classList.add("comment-delete-button");
-            commentDeleteButton.onclick = function() {
-                deleteComment(comment.id);
-            }
-            commentListElement.appendChild(commentDeleteButton);
+      // Initialize the delete button element and attach it to the list element
+      const commentDeleteButton = document.createElement('button');
+      commentDeleteButton.innerHTML = "Delete";
+      commentDeleteButton.classList.add("comment-delete-button");
+      commentDeleteButton.onclick = function() {
+        deleteComment(comment.id);
+      }
+      commentListElement.appendChild(commentDeleteButton);
 
-            // Attach the comment list element to the comments container
-            commentsContainer.appendChild(commentListElement);
+      // Attach the comment list element to the comments container
+      commentsContainer.appendChild(commentListElement);
                 
-        }
-        loadComments.commentsLoaded = comments.length;
-    });
+    }
+    commentsLoaded = comments.length;
+  });
 }
 
 /** 
@@ -231,7 +235,7 @@ function deleteComment(commentId) {
     fetch(fetchURL, {
         method: "DELETE"
     }).then(response => {
-        // After the comment was deleted, reload the same number of comments (0 more comments)
-        LoadComments(0);
+        // After the comment was deleted, reload the comments
+        reloadComments();
     });
 }
