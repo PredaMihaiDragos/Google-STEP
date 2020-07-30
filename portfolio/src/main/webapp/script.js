@@ -79,7 +79,7 @@ function init() {
     // Simulate scroll event to position elements right
     onWindowScrolled();
 
-    loadComments();
+    initComments();
     initMap();
 }
 
@@ -92,6 +92,29 @@ function scrollToElement(elementId, duration = 300)
     $('html, body').animate({
                     scrollTop: $('#' + elementId).offset().top - navOffset
                 }, duration);
+}
+
+/**
+ * Function that inits the comments section
+ * Loads the comments languages available in a dropdown
+ * Then load the comments in that language
+ */
+function initComments() {
+  // Make a GET request to "/languages" and parse the response json into "languages" array
+  fetch('/languages').then(response => response.json()).then((languages) => {
+    // Get the comments language element
+    const commentsLanguageElement = document.getElementById('comments-language');
+
+    // For each language create and add an option to the comments language element
+    for(let language of languages) {
+      const optionElement = document.createElement("option");
+      optionElement.text = language.displayName + " (" + language.code + ")";
+      optionElement.value = language.code;
+      commentsLanguageElement.add(optionElement);
+    }
+
+    loadComments();
+  });
 }
 
 /**
