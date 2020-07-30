@@ -22,6 +22,8 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.sps.data.Comment;
 import com.google.gson.Gson;
@@ -102,19 +104,24 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Get the input from the request
-    String message = request.getParameter("comment-message");
-    String addedBy = request.getParameter("comment-addedBy");
+    // Make sure user is logged in before adding the comment
+    UserService userService = UserServiceFactory.getUserService();
+    
+    if (userService.isUserLoggedIn()) {
+        // Get the input from the request
+        String message = request.getParameter("comment-message");
+        String addedBy = request.getParameter("comment-addedBy");
 
-    // Create the commentEntity
-    Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("message", message);
-    commentEntity.setProperty("addedBy", addedBy);
-    commentEntity.setProperty("addedDate", new Date());
+        // Create the commentEntity
+        Entity commentEntity = new Entity("Comment");
+        commentEntity.setProperty("message", message);
+        commentEntity.setProperty("addedBy", addedBy);
+        commentEntity.setProperty("addedDate", new Date());
 
-    // Save commentEntity in datastore
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(commentEntity);
+        // Save commentEntity in datastore
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(commentEntity);
+    }
 
     response.sendRedirect("/index.html");
   }

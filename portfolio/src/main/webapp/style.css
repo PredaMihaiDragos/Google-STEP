@@ -54,6 +54,11 @@ nav {
     color:rgb(0, 35, 68);
 }
 
+#logout-link-container {
+    display:none;
+    margin-right:auto;
+}
+
 .fixedNav {
     position:fixed;
     top:0;
@@ -75,6 +80,14 @@ nav {
     padding:5px;
     margin:10px;
     border:solid;
+}
+
+#comment-form-container {
+    display:none;
+}
+
+#comment-form-login {
+    display:none;
 }
 
 #map {

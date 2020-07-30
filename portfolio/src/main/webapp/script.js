@@ -15,6 +15,19 @@
 // Global constants
 const COMMENTS_PER_LOAD = 10;
 
+// Globals
+
+// The display method of the elements that a logged in user should see
+const loggedInElements = {
+    'comment-form-container' : 'inline',
+    'logout-link-container' : 'inline',
+};
+
+// The display method of the elements that a logged out user should see
+const loggedOutElements = {
+    'comment-form-login' : 'inline',
+};
+
 /**
  * Adds a random fact to the page.
  */
@@ -76,6 +89,9 @@ function init() {
     // Simulate scroll event to position elements right
     onWindowScrolled();
 
+    // Show the elements that the user should see considering the login status
+    initUserLoggedElements();
+  
     loadComments();
     initMap();
 }
@@ -221,6 +237,7 @@ function addInfoWindow(map, marker, text) {
   marker.addListener('click', function() {
     infoWindow.open(map, marker);
   });
+}
 
 /**
  * Function that deletes a comment
@@ -232,6 +249,38 @@ function deleteComment(commentId) {
         method: "DELETE"
     }).then(response => {
         // After the comment was deleted, reload the same number of comments (0 more comments)
-        LoadComments(0);
+        loadComments(0);
     });
+}
+
+/**
+ * If the user is logged in, the function inits loggedInElements
+ * Else the function inits loggedOutElements
+ */
+function initUserLoggedElements() {
+    // Make a GET request to "/user" to get user information in user object
+    fetch('user').then(response => response.json()).then((user) => {
+        if(user.loggedIn === true) {
+            const logoutLink = document.getElementById('logout-link');
+            logoutLink.href = user.logoutURL;
+            displayElements(loggedInElements);
+        } else {
+            const loginLink = document.getElementById('login-link');
+            loginLink.href = user.loginURL;
+            displayElements(loggedOutElements);
+        }
+    });
+}
+
+/**
+ * Function that displays elements
+ * Parameter elements is a dict
+ * elements' value is element's id
+ * elements' key is element's display method
+ */
+function displayElements(elements) {
+    for (const [elemId, displayMethod] of Object.entries(elements)) {
+        const elem = document.getElementById(elemId);
+        elem.style.display = displayMethod;
+    }
 }
