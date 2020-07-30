@@ -182,8 +182,7 @@ function initUserLoggedElements() {
             const logoutLink = document.getElementById('logout-link');
             logoutLink.href = user.logoutURL;
             displayElements(loggedInElements);
-        }
-        else {
+        } else {
             const loginLink = document.getElementById('login-link');
             loginLink.href = user.loginURL;
             displayElements(loggedOutElements);
