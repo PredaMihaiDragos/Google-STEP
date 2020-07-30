@@ -1,11 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
 
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
-}
-
+/* Header */
 header {
     position:relative;
     display:flex;
@@ -32,6 +27,7 @@ header {
     font-size:40px;
 }
 
+/* Navbar */
 nav {
     position:relative;
     display:flex;
@@ -68,6 +64,13 @@ nav {
     top:0;
 }
 
+/* Content */
+#content {
+  margin-left: auto;
+  margin-right: auto;
+  width: 650px;
+}
+
 #comments-container {
     position:relative;
     display:flex;
@@ -85,4 +88,8 @@ nav {
 
 #comment-form-login {
     display:none;
+}
+
+#map {
+  height: 50vh;
 }
