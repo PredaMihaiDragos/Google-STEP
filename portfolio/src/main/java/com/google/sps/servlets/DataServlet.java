@@ -23,6 +23,9 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 import com.google.sps.data.Comment;
 import com.google.gson.Gson;
 import java.util.Date;
@@ -50,6 +53,7 @@ public class DataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the request
     String maxCommentsString = request.getParameter("max-comments");
+    String languageCode = request.getParameter("comments-language-code");
 
     // Convert the input to an int or Integer.MAX_VALUE
     int maxComments;
@@ -81,6 +85,14 @@ public class DataServlet extends HttpServlet {
       String message = (String) entity.getProperty("message");
       String addedBy = (String) entity.getProperty("addedBy");
       Date addedDate = (Date) entity.getProperty("addedDate");
+
+      // If a languageCode was specified, translate the comments' message in that language
+      if(languageCode != null) {
+        Translate translate = TranslateOptions.getDefaultInstance().getService();
+        Translation translation =
+            translate.translate(message, Translate.TranslateOption.targetLanguage(languageCode));
+        message = translation.getTranslatedText();
+      }
 
       comments.add(new Comment(id, message, addedBy, addedDate));
     }
