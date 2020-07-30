@@ -113,6 +113,11 @@ function initComments() {
       commentsLanguageElement.add(optionElement);
     }
 
+    // Reload the comments every time user changes the language
+    commentsLanguageElement.onchange = function() {
+      reloadComments();
+    }
+
     loadComments();
   });
 }
@@ -129,9 +134,17 @@ function loadComments(commentsToLoad = COMMENTS_PER_LOAD) {
  * Function that reloads and displays commentsNumber comments
  */
 function reloadComments(commentsNumber = commentsLoaded) {
-  // Make a GET request to "/data" and parse the response json into "comments" array
-  const fetchURL = '/data?max-comments=' + commentsNumber;
+  let fetchURL = '/data?max-comments=' + commentsNumber;
 
+  // If the languageCode is not 'original', add the languageCode to the fetchURL
+  const commentsLanguageElement = document.getElementById('comments-language');
+  const languageCode = commentsLanguageElement.
+                       options[commentsLanguageElement.selectedIndex].value;
+  if(languageCode != 'original') {
+    fetchURL += '&comments-language-code=' + languageCode;
+  }
+
+  // Make a GET request to "/data" and parse the response json into "comments" array
   fetch(fetchURL).then(response => response.json()).then((comments) => {
     // Get the comments container element
     const commentsContainer = document.getElementById('comments-container');
