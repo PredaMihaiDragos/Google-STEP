@@ -93,7 +93,6 @@ function init() {
     // Show the elements that the user should see considering the login status
     initUserLoggedElements();
   
-    loadComments();
     initMap();
 }
 
@@ -278,6 +277,9 @@ function initUserLoggedElements() {
             loginLink.href = user.loginURL;
             displayElements(loggedOutElements);
         }
+
+        // Load comments only after we know the user's login status
+        loadComments();
     });
 }
 
