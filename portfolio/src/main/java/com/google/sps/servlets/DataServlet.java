@@ -106,7 +106,6 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Make sure user is logged in before adding the comment
     UserService userService = UserServiceFactory.getUserService();
-    
     if (userService.isUserLoggedIn()) {
         // Get the input from the request
         String message = request.getParameter("comment-message");
@@ -133,20 +132,24 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Get the input from the request
-    String idString = request.getParameter("comment-id");
+    // Make sure the user deleting comments is an admin
+    UserService userService = UserServiceFactory.getUserService();
+    if(userService.isUserAdmin()) {
+      // Get the input from the request
+      String idString = request.getParameter("comment-id");
 
-    // Convert the input to a long or return
-    long id;
-    try {
+      // Convert the input to a long or return
+      long id;
+      try {
       id = Long.parseLong(idString);
-    } catch (NumberFormatException e) {
-      return;
-    }
+      } catch (NumberFormatException e) {
+        return;
+      }
 
-    // Delete the comment with id
-    Key commentEntityKey = KeyFactory.createKey("Comment", id);
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.delete(commentEntityKey);
+      // Delete the comment with id
+      Key commentEntityKey = KeyFactory.createKey("Comment", id);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.delete(commentEntityKey);
+    }
   }
 }
