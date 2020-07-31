@@ -263,6 +263,10 @@ function initUserLoggedElements() {
         if(user.loggedIn === true) {
             const logoutLink = document.getElementById('logout-link');
             logoutLink.href = user.logoutURL;
+
+            const nicknameInput = document.getElementById('comment-addedBy');
+            nicknameInput.value = user.nickname;
+
             displayElements(loggedInElements);
         } else {
             const loginLink = document.getElementById('login-link');
