@@ -16,6 +16,7 @@
 const COMMENTS_PER_LOAD = 10;
 
 // Globals
+let isAdmin = false;
 
 // The display method of the elements that a logged in user should see
 const loggedInElements = {
@@ -133,14 +134,17 @@ function loadComments(commentsToLoad = COMMENTS_PER_LOAD) {
                                                          ', posted by ' + comment.addedBy +
                                                          ', on: ' + comment.addedDate);
 
-            // Initialize the delete button element and attach it to the list element
-            const commentDeleteButton = document.createElement('button');
-            commentDeleteButton.innerHTML = "Delete";
-            commentDeleteButton.classList.add("comment-delete-button");
-            commentDeleteButton.onclick = function() {
+            // If user is an admin, show delete buttons to each comment
+            if(isAdmin) {
+              // Initialize the delete button element and attach it to the list element
+              const commentDeleteButton = document.createElement('button');
+              commentDeleteButton.innerHTML = "Delete";
+              commentDeleteButton.classList.add("comment-delete-button");
+              commentDeleteButton.onclick = function() {
                 deleteComment(comment.id);
+              }
+              commentListElement.appendChild(commentDeleteButton);
             }
-            commentListElement.appendChild(commentDeleteButton);
 
             // Attach the comment list element to the comments container
             commentsContainer.appendChild(commentListElement);
@@ -263,6 +267,11 @@ function initUserLoggedElements() {
         if(user.loggedIn === true) {
             const logoutLink = document.getElementById('logout-link');
             logoutLink.href = user.logoutURL;
+
+            if(user.isAdmin) {
+              isAdmin = true;
+            }
+
             displayElements(loggedInElements);
         } else {
             const loginLink = document.getElementById('login-link');
