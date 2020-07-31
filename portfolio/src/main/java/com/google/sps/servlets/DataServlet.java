@@ -121,6 +121,24 @@ public class DataServlet extends HttpServlet {
         // Save commentEntity in datastore
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(commentEntity);
+
+        // Make a query to get the user entity with corresponding id from the datastore
+        String userId = userService.getCurrentUser().getUserId();
+        Query query =
+        new Query("User")
+            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, userId));
+        PreparedQuery results = datastore.prepare(query);
+        Entity entity = results.asSingleEntity();
+
+        // If the user is not in datastore, create a new entity
+        if(entity == null) {
+            entity = new Entity("User");
+            entity.setProperty("id", userId);
+        }
+
+        // Update user's nickname
+        entity.setProperty("nickname", addedBy);
+        datastore.put(entity);
     }
 
     response.sendRedirect("/index.html");
