@@ -82,9 +82,10 @@ public class DataServlet extends HttpServlet {
       long id = entity.getKey().getId();
       String message = (String) entity.getProperty("message");
       String addedBy = (String) entity.getProperty("addedBy");
+      String email = (String) entity.getProperty("email");
       Date addedDate = (Date) entity.getProperty("addedDate");
 
-      comments.add(new Comment(id, message, addedBy, addedDate));
+      comments.add(new Comment(id, message, addedBy, email, addedDate));
     }
 
     // Convert the comments to JSON
@@ -116,6 +117,7 @@ public class DataServlet extends HttpServlet {
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("message", message);
         commentEntity.setProperty("addedBy", addedBy);
+        commentEntity.setProperty("email", userService.getCurrentUser().getEmail());
         commentEntity.setProperty("addedDate", new Date());
 
         // Save commentEntity in datastore

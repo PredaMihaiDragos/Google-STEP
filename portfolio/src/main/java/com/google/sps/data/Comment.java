@@ -22,17 +22,19 @@ public final class Comment {
   private final long id;
   private final String message;
   private final String addedBy;
+  private final String email;
   private final Date addedDate;
 
-  public Comment(long id, String message, String addedBy, Date addedDate) {
+  public Comment(long id, String message, String addedBy, String email, Date addedDate) {
     this.id = id;
     this.message = message;
     this.addedBy = addedBy;
+    this.email = email;
     this.addedDate = addedDate;
   }
 
-  public Comment(long id, String message, String addedBy) {
-    this(id, message, addedBy, new Date());
+  public Comment(long id, String message, String email, String addedBy) {
+    this(id, message, addedBy, email, new Date());
   }
 
   public String getMessage() {
@@ -40,7 +42,11 @@ public final class Comment {
   }
 
   public String getAddedBy() {
-      return addedBy;
+    return addedBy;
+  }
+
+  public String getEmail() {
+    return email;
   }
 
   public Date getAddedDate() {
