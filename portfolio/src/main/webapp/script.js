@@ -130,7 +130,8 @@ function loadComments(commentsToLoad = COMMENTS_PER_LOAD) {
         for(let comment of comments) {
             // Create the list element
             const commentListElement = createListElement('Message: ' + comment.message +
-                                                         ', posted by ' + comment.addedBy +
+                                                         ', posted by <abbr title="' + comment.email + 
+                                                         '">' + comment.addedBy + '</abbr>' +
                                                          ', on: ' + comment.addedDate);
 
             // Initialize the delete button element and attach it to the list element
@@ -151,11 +152,11 @@ function loadComments(commentsToLoad = COMMENTS_PER_LOAD) {
 }
 
 /** 
- * Function that creates an <li> element containing text
+ * Function that creates an <li> element containing html
  */
-function createListElement(text) {
+function createListElement(html) {
   const liElement = document.createElement('li');
-  liElement.innerText = text;
+  liElement.innerHTML = html;
   return liElement;
 }
 
