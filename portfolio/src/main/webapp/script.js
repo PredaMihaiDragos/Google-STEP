@@ -140,7 +140,7 @@ function loadComments(commentsToLoad = COMMENTS_PER_LOAD) {
             commentDeleteButton.onclick = function() {
                 deleteComment(comment.id);
             }
-            commentListElement.appendChild(commentDeleteButton);
+            commentListElement.insertBefore(commentDeleteButton, commentListElement.firstChild);
 
             // Attach the comment list element to the comments container
             commentsContainer.appendChild(commentListElement);
