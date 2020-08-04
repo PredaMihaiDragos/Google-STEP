@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -86,8 +87,12 @@ public class DataServlet extends HttpServlet {
       String addedBy = (String) entity.getProperty("addedBy");
       Date addedDate = (Date) entity.getProperty("addedDate");
 
-      // If a languageCode was specified, translate the comments' message in that language
-      if(languageCode != null) {
+      // Get the supported language codes in an array
+      String[] languageCodes = Locale.getISOLanguages();
+
+      // If a languageCode was specified and it is supported, 
+      // translate the comments' message in that language
+      if(languageCode != null && Arrays.asList(languageCodes).contains(languageCode)) {
         Translate translate = TranslateOptions.getDefaultInstance().getService();
         Translation translation =
             translate.translate(message, Translate.TranslateOption.targetLanguage(languageCode));
