@@ -303,23 +303,23 @@ function getColor(r, g, b) {
 /**
  * Function that returns an interpolated color between colorStart and colorStop
  * colorStart, colorStop are objects with 'r', 'g', 'b' properties
- * percentage is the interpolation value between [0, 1]
+ * fraction is the interpolation value between [0, 1]
  * 0 means colorStart, 1 means colorStop
  */
-function interpolateColor(colorStart, colorStop, percentage) {  
+function interpolateColor(colorStart, colorStop, fraction) {  
   return {
-    'r': interpolateValue(colorStart.r, colorStop.r, percentage),
-    'g': interpolateValue(colorStart.g, colorStop.g, percentage),
-    'b': interpolateValue(colorStart.b, colorStop.b, percentage),
+    'r': interpolateValue(colorStart.r, colorStop.r, fraction),
+    'g': interpolateValue(colorStart.g, colorStop.g, fraction),
+    'b': interpolateValue(colorStart.b, colorStop.b, fraction),
   };
 }
 
 /**
- * Function that returns an interpolated value between start and stop based on percentage
- * percentage is between [0, 1]
+ * Function that returns an interpolated value between start and stop based on fraction
+ * fraction is between [0, 1]
  */
-function interpolateValue(start, stop, percentage) {
-  return start + percentage * (stop - start);
+function interpolateValue(start, stop, fraction) {
+  return start + fraction * (stop - start);
 }
 
 /*
