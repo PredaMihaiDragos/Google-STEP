@@ -16,7 +16,7 @@ package com.google.sps.data;
 
 import java.util.Locale;
 
-/** Class containing a language. */
+/** Class containing a language object */
 public final class Language {
 
   private final String code;

@@ -114,7 +114,7 @@ function initComments() {
     }
 
     // If the user didn't choose other language before, set it to 'original'
-    if(localStorage.hasOwnProperty('commentsLanguageCode') === false)
+    if(!localStorage.hasOwnProperty('commentsLanguageCode'))
       localStorage.commentsLanguageCode = 'original';
 
     // Set the languages dropdown to the language the user chose before
