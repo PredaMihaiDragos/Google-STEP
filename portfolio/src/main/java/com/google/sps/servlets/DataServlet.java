@@ -134,22 +134,23 @@ public class DataServlet extends HttpServlet {
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Make sure the user deleting comments is an admin
     UserService userService = UserServiceFactory.getUserService();
-    if(userService.isUserAdmin()) {
-      // Get the input from the request
-      String idString = request.getParameter("comment-id");
-
-      // Convert the input to a long or return
-      long id;
-      try {
-      id = Long.parseLong(idString);
-      } catch (NumberFormatException e) {
-        return;
-      }
-
-      // Delete the comment with id
-      Key commentEntityKey = KeyFactory.createKey("Comment", id);
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      datastore.delete(commentEntityKey);
+    if(!userService.isUserAdmin()) {
+      return;
     }
+    // Get the input from the request
+    String idString = request.getParameter("comment-id");
+
+    // Convert the input to a long or return
+    long id;
+    try {
+      id = Long.parseLong(idString);
+    } catch (NumberFormatException e) {
+      return;
+    }
+
+    // Delete the comment with id
+    Key commentEntityKey = KeyFactory.createKey("Comment", id);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.delete(commentEntityKey);
   }
 }
