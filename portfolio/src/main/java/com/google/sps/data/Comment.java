@@ -40,8 +40,6 @@ public final class Comment {
     this(id, message, addedBy, new Date(), sentimentScore);
   }
 
-  // Getters
-
   public String getMessage() {
     return message;
   }
