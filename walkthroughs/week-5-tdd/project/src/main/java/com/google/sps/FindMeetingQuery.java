@@ -102,9 +102,9 @@ public final class FindMeetingQuery {
     eventPoints.sort(EventPoint.ORDER_BY_TIME);
 
     // This array holds the events that contain mandatory attendees
-    // and held during the eventPoint on startIndex time
-    // We add an event to this array when we go through a start point
-    // And delete it when we go through an end point
+    // and are held during the eventPoint on startIndex time
+    // We add an event to this array when we go through a starting point
+    // And delete it when we go through an ending point
     Collection<Event> intersectEvents = new HashSet<>();
 
     // Index for the meeting's ending point
@@ -132,7 +132,7 @@ public final class FindMeetingQuery {
       if(!intersectEvents.isEmpty())
         continue;
 
-      // We try to increase the end point as much as we can to make the range bigger
+      // We try to increase the ending point as much as we can to make the range bigger
       while(endIndex < eventPoints.size()) {
         EventPoint endPoint = eventPoints.get(endIndex);
 
