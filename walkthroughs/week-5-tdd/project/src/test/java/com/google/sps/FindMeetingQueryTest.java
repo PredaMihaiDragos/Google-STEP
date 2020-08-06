@@ -394,7 +394,7 @@ public final class FindMeetingQueryTest {
   }
 
   @Test
-  public void onlyOptionalsNoHaps() {
+  public void onlyOptionalsNoGaps() {
     // Only 2 optional attendees with no big enough gaps in their schedules
     // Should return all day because the optionals cannot be accommodated
     //

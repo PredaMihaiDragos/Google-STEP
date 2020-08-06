@@ -74,7 +74,7 @@ public final class FindMeetingQuery {
    * through each event and each time we check which attendees of the event are in the MeetingRequest
    */
   private Collection<TimeRange> queryMandatories(Collection<Event> events, MeetingRequest request) {
-    ArrayList<TimeRange> answer = new ArrayList<>();
+    ArrayList<TimeRange> availableRanges = new ArrayList<>();
 
     // eventPoints holds a list with starting and ending points of events
     // We need it so we can sort the points by the time and process them in ascending order
@@ -155,8 +155,9 @@ public final class FindMeetingQuery {
             // If the duration of the range is long enough
             // and the ending point is not the same with the one we had at the previous starting point
             if(meetingRange.duration() >= request.getDuration() &&
-               (answer.isEmpty() || meetingRange.end() > answer.get(answer.size()-1).end())) {
-              answer.add(meetingRange);
+               (availableRanges.isEmpty() || 
+                meetingRange.end() > availableRanges.get(availableRanges.size()-1).end())) {
+              availableRanges.add(meetingRange);
             }
             break;
           }
@@ -165,24 +166,16 @@ public final class FindMeetingQuery {
       }
     }
 
-    return answer;
-  }
-
-  /**
-   * Returns an intersection between two collections
-   */
-  private Collection<String> getIntersect(Collection<String> a, Collection<String> b) {
-    Collection<String> ret = new HashSet<String>();
-    for(String str : a) {
-      if(b.contains(str)) {
-        ret.add(str);
-      }
-    }
-    return ret;
+    return availableRanges;
   }
 
   private Boolean areDisjoint(Collection<String> a, Collection<String> b) {
-    return getIntersect(a, b).isEmpty();
+    for(String str : a) {
+      if(b.contains(str)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
@@ -210,8 +203,9 @@ public final class FindMeetingQuery {
       @Override
       public int compare(EventPoint a, EventPoint b) {
         int result = Long.compare(a.getTime(), b.getTime());
-        if(result == 0)
+        if(result == 0) {
           return a.type == Type.END ? -1 : 1;
+        }
         return result;
       }
     };
@@ -221,8 +215,9 @@ public final class FindMeetingQuery {
     }
 
     public int getTime() {
-      if(type == Type.START)
+      if(type == Type.START) {
         return event.getWhen().start();
+      }
       return event.getWhen().end();
     }
 
