@@ -22,10 +22,15 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import com.google.sps.data.Comment;
 import com.google.gson.Gson;
 import java.util.Date;
@@ -85,7 +90,9 @@ public class DataServlet extends HttpServlet {
       long id = entity.getKey().getId();
       String message = (String) entity.getProperty("message");
       String addedBy = (String) entity.getProperty("addedBy");
+      String email = (String) entity.getProperty("email");
       Date addedDate = (Date) entity.getProperty("addedDate");
+      Double sentimentScore = (Double) entity.getProperty("sentimentScore");
 
       // Get the supported language codes in an array
       String[] languageCodes = Locale.getISOLanguages();
@@ -99,7 +106,7 @@ public class DataServlet extends HttpServlet {
         message = translation.getTranslatedText();
       }
 
-      comments.add(new Comment(id, message, addedBy, addedDate));
+      comments.add(new Comment(id, message, addedBy, email, addedDate, sentimentScore));
     }
 
     // Convert the comments to JSON
@@ -120,19 +127,43 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Get the input from the request
-    String message = request.getParameter("comment-message");
-    String addedBy = request.getParameter("comment-addedBy");
+    // Make sure user is logged in before adding the comment
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserLoggedIn()) {
+        // Get the input from the request
+        String message = request.getParameter("comment-message");
+        String addedBy = request.getParameter("comment-addedBy");
 
-    // Create the commentEntity
-    Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("message", message);
-    commentEntity.setProperty("addedBy", addedBy);
-    commentEntity.setProperty("addedDate", new Date());
+        // Create the commentEntity
+        Entity commentEntity = new Entity("Comment");
+        commentEntity.setProperty("message", message);
+        commentEntity.setProperty("addedBy", addedBy);
+        commentEntity.setProperty("email", userService.getCurrentUser().getEmail());
+        commentEntity.setProperty("addedDate", new Date());
+        commentEntity.setProperty("sentimentScore", getSentimentScore(message));
 
-    // Save commentEntity in datastore
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(commentEntity);
+        // Save commentEntity in datastore
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(commentEntity);
+
+        // Make a query to get the user entity with corresponding id from the datastore
+        String userId = userService.getCurrentUser().getUserId();
+        Query query =
+        new Query("User")
+            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, userId));
+        PreparedQuery results = datastore.prepare(query);
+        Entity entity = results.asSingleEntity();
+
+        // If the user is not in datastore, create a new entity
+        if(entity == null) {
+            entity = new Entity("User");
+            entity.setProperty("id", userId);
+        }
+
+        // Update user's nickname
+        entity.setProperty("nickname", addedBy);
+        datastore.put(entity);
+    }
 
     response.sendRedirect("/index.html");
   }
@@ -144,6 +175,11 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Make sure the user deleting comments is an admin
+    UserService userService = UserServiceFactory.getUserService();
+    if(!userService.isUserAdmin()) {
+      return;
+    }
     // Get the input from the request
     String idString = request.getParameter("comment-id");
 
@@ -159,5 +195,27 @@ public class DataServlet extends HttpServlet {
     Key commentEntityKey = KeyFactory.createKey("Comment", id);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.delete(commentEntityKey);
+  }
+
+  /**
+   * Method that returns parameter text's sentiment score
+   * Returns a value in [-1, 1], representing how negative or positive text is
+   */
+  private static float getSentimentScore(String text) throws IOException {
+      // Init doc element containing text
+      Document doc =
+        Document.newBuilder().setContent(text).setType(Document.Type.PLAIN_TEXT).build();
+
+      // Init the languageService
+      LanguageServiceClient languageService = LanguageServiceClient.create();
+    
+      // Analyze the doc's sentiment using the languageService and get a score
+      Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+      float score = sentiment.getScore();
+
+      // Close the languageService because we no longer need it
+      languageService.close();
+
+      return score;
   }
 }

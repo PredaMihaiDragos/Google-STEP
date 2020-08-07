@@ -35,6 +35,9 @@
           </span>
       </header>
       <nav id="navbar">
+          <span class="nav-button" id="logout-link-container">
+              <a class="nav-button-link" id="logout-link">Logout</a>
+          </span>
           <span class="nav-button">
               <a class="nav-button-link" onclick="scrollToElement('header')">Home</a>
           </span>
@@ -92,11 +95,16 @@
             <option value="original">Original</option>
           </select>
           <div id="comments-container" onscroll="onCommentsContainerScrolled()"></div>
-          <form action="/data" method="POST">
-            <input type="text" name="comment-addedBy" placeholder="Your name">
-            <input type="text" name="comment-message" placeholder="Add a comment">
-            <input type="submit" />
-          </form>
+          <div id="comment-form-container">
+            <form action="/data" method="POST">
+                <input type="text" id="comment-addedBy" name="comment-addedBy" placeholder="Your name">
+                <input type="text" name="comment-message" placeholder="Add a comment">
+                <input type="submit" />
+            </form>
+          </div>
+          <div id="comment-form-login">
+              You need to <a id="login-link">login</a> to post comments!
+          </div>
       </aside>
 
       <aside>
