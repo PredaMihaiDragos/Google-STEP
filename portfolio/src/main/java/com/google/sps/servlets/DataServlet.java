@@ -85,10 +85,11 @@ public class DataServlet extends HttpServlet {
       long id = entity.getKey().getId();
       String message = (String) entity.getProperty("message");
       String addedBy = (String) entity.getProperty("addedBy");
+      String email = (String) entity.getProperty("email");
       Date addedDate = (Date) entity.getProperty("addedDate");
       Double sentimentScore = (Double) entity.getProperty("sentimentScore");
 
-      comments.add(new Comment(id, message, addedBy, addedDate, sentimentScore));
+      comments.add(new Comment(id, message, addedBy, email, addedDate, sentimentScore));
     }
 
     // Convert the comments to JSON
@@ -120,12 +121,31 @@ public class DataServlet extends HttpServlet {
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("message", message);
         commentEntity.setProperty("addedBy", addedBy);
+        commentEntity.setProperty("email", userService.getCurrentUser().getEmail());
         commentEntity.setProperty("addedDate", new Date());
         commentEntity.setProperty("sentimentScore", getSentimentScore(message));
 
         // Save commentEntity in datastore
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(commentEntity);
+
+        // Make a query to get the user entity with corresponding id from the datastore
+        String userId = userService.getCurrentUser().getUserId();
+        Query query =
+        new Query("User")
+            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, userId));
+        PreparedQuery results = datastore.prepare(query);
+        Entity entity = results.asSingleEntity();
+
+        // If the user is not in datastore, create a new entity
+        if(entity == null) {
+            entity = new Entity("User");
+            entity.setProperty("id", userId);
+        }
+
+        // Update user's nickname
+        entity.setProperty("nickname", addedBy);
+        datastore.put(entity);
     }
 
     response.sendRedirect("/index.html");

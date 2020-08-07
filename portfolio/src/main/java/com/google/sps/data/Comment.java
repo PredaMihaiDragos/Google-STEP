@@ -22,13 +22,15 @@ public final class Comment {
   private final long id;
   private final String message;
   private final String addedBy;
+  private final String email;
   private final Date addedDate;
   private final Double sentimentScore;
 
-  public Comment(long id, String message, String addedBy, Date addedDate, Double sentimentScore) {
+  public Comment(long id, String message, String addedBy, String email, Date addedDate, Double sentimentScore) {
     this.id = id;
     this.message = message;
     this.addedBy = addedBy;
+    this.email = email;
     this.addedDate = addedDate;
     this.sentimentScore = sentimentScore;
   }
@@ -39,6 +41,10 @@ public final class Comment {
 
   public String getAddedBy() {
     return addedBy;
+  }
+
+  public String getEmail() {
+    return email;
   }
 
   public Date getAddedDate() {

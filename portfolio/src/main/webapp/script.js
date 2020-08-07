@@ -130,7 +130,8 @@ function loadComments(commentsToLoad = COMMENTS_PER_LOAD) {
         for(let comment of comments) {
             // Create the list element
             const commentListElement = createListElement('Message: ' + comment.message +
-                                                         ', posted by ' + comment.addedBy +
+                                                         ', posted by <abbr title="' + comment.email + 
+                                                         '">' + comment.addedBy + '</abbr>' +
                                                          ', on: ' + comment.addedDate);
 
             // Set comment color based on its sentimentScore
@@ -147,7 +148,7 @@ function loadComments(commentsToLoad = COMMENTS_PER_LOAD) {
             commentDeleteButton.onclick = function() {
                 deleteComment(comment.id);
             }
-            commentListElement.appendChild(commentDeleteButton);
+            commentListElement.insertBefore(commentDeleteButton, commentListElement.firstChild);
 
             // Attach the comment list element to the comments container
             commentsContainer.appendChild(commentListElement);
@@ -158,11 +159,11 @@ function loadComments(commentsToLoad = COMMENTS_PER_LOAD) {
 }
 
 /** 
- * Function that creates an <li> element containing text
+ * Function that creates an <li> element containing html
  */
-function createListElement(text) {
+function createListElement(html) {
   const liElement = document.createElement('li');
-  liElement.innerText = text;
+  liElement.innerHTML = html;
   return liElement;
 }
 
@@ -332,6 +333,10 @@ function initUserLoggedElements() {
         if(user.loggedIn === true) {
             const logoutLink = document.getElementById('logout-link');
             logoutLink.href = user.logoutURL;
+
+            const nicknameInput = document.getElementById('comment-addedBy');
+            nicknameInput.value = user.nickname;
+
             displayElements(loggedInElements);
         } else {
             const loginLink = document.getElementById('login-link');
