@@ -129,8 +129,10 @@ public final class FindMeetingQuery {
       intersectEvents.remove(startEvent);
 
       // If there is still at least an event with mandatory attendees during startPoint
-      if(!intersectEvents.isEmpty())
+      // continue to the next startIndex
+      if(!intersectEvents.isEmpty()) {
         continue;
+      }
 
       // We try to increase the ending point as much as we can to make the range bigger
       while(endIndex < eventPoints.size()) {
@@ -140,9 +142,9 @@ public final class FindMeetingQuery {
         // We also make sure our ending point is just before and event starts
         if(endIndex > startIndex && endPoint.getType() == EventPoint.Type.START) {
           TimeRange meetingRange = 
-          TimeRange.fromStartEnd(startPoint.getTime(), 
-                                 endPoint.getTime(), 
-                                 false);
+            TimeRange.fromStartEnd(startPoint.getTime(), 
+                                   endPoint.getTime(), 
+                                   false);
 
           // There are two cases when we don't want to increase the ending point anymore
           // and we want to save the current range if it's long enough:
