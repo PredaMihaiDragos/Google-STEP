@@ -111,7 +111,6 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Make sure user is logged in before adding the comment
     UserService userService = UserServiceFactory.getUserService();
-    
     if (userService.isUserLoggedIn()) {
         // Get the input from the request
         String message = request.getParameter("comment-message");
@@ -158,6 +157,11 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Make sure the user deleting comments is an admin
+    UserService userService = UserServiceFactory.getUserService();
+    if(!userService.isUserAdmin()) {
+      return;
+    }
     // Get the input from the request
     String idString = request.getParameter("comment-id");
 

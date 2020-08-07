@@ -47,7 +47,7 @@ public class UserServlet extends HttpServlet {
       String logoutURL = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
       
       // Init user as a LoggedUser
-      user = new LoggedUser(userId, userEmail, logoutURL);
+      user = new LoggedUser(userId, userEmail, logoutURL, userService.isUserAdmin());
     } else {
       // Load user variables
       String urlToRedirectToAfterUserLogsIn = "/";

@@ -16,6 +16,7 @@
 const COMMENTS_PER_LOAD = 10;
 
 // Globals
+let isAdmin = false;
 
 // The display method of the elements that a logged in user should see
 const loggedInElements = {
@@ -92,7 +93,6 @@ function init() {
     // Show the elements that the user should see considering the login status
     initUserLoggedElements();
   
-    loadComments();
     initMap();
 }
 
@@ -133,7 +133,7 @@ function loadComments(commentsToLoad = COMMENTS_PER_LOAD) {
                                                          ', posted by <abbr title="' + comment.email + 
                                                          '">' + comment.addedBy + '</abbr>' +
                                                          ', on: ' + comment.addedDate);
-
+          
             // Set comment color based on its sentimentScore
             const commentColor = getSentimentColor(comment.sentimentScore);
             commentListElement.style.color = "rgb(" + commentColor.r + 
@@ -141,14 +141,17 @@ function loadComments(commentsToLoad = COMMENTS_PER_LOAD) {
                                                 "," + commentColor.b +
                                                 ")"; 
 
-            // Initialize the delete button element and attach it to the list element
-            const commentDeleteButton = document.createElement('button');
-            commentDeleteButton.innerHTML = "Delete";
-            commentDeleteButton.classList.add("comment-delete-button");
-            commentDeleteButton.onclick = function() {
+            // If user is an admin, show delete buttons to each comment
+            if(isAdmin) {
+              // Initialize the delete button element and attach it to the list element
+              const commentDeleteButton = document.createElement('button');
+              commentDeleteButton.innerHTML = "Delete";
+              commentDeleteButton.classList.add("comment-delete-button");
+              commentDeleteButton.onclick = function() {
                 deleteComment(comment.id);
+              }
+              commentListElement.insertBefore(commentDeleteButton, commentListElement.firstChild);
             }
-            commentListElement.insertBefore(commentDeleteButton, commentListElement.firstChild);
 
             // Attach the comment list element to the comments container
             commentsContainer.appendChild(commentListElement);
@@ -333,9 +336,12 @@ function initUserLoggedElements() {
         if(user.loggedIn === true) {
             const logoutLink = document.getElementById('logout-link');
             logoutLink.href = user.logoutURL;
-
             const nicknameInput = document.getElementById('comment-addedBy');
             nicknameInput.value = user.nickname;
+
+            if(user.isAdmin) {
+              isAdmin = true;
+            }
 
             displayElements(loggedInElements);
         } else {
@@ -343,6 +349,9 @@ function initUserLoggedElements() {
             loginLink.href = user.loginURL;
             displayElements(loggedOutElements);
         }
+
+        // Load comments only after we know the user's login status
+        loadComments();
     });
 }
 

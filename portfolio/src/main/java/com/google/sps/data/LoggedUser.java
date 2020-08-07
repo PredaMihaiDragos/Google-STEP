@@ -27,14 +27,16 @@ public final class LoggedUser extends User {
   private final String email;
   private final String nickname;
   private final String logoutURL;
+  private Boolean isAdmin;
   
-  public LoggedUser(String id, String email, String logoutURL) {
+  public LoggedUser(String id, String email, String logoutURL, Boolean isAdmin) {
     // Init User super class with loggedIn = true
     super(true);
     
     this.email = email;
     this.nickname = loadNickname(id);
     this.logoutURL = logoutURL;
+    this.isAdmin = isAdmin;
   }
 
   /** 
@@ -69,5 +71,9 @@ public final class LoggedUser extends User {
 
   public String getLogoutURL() {
     return logoutURL;
+  }
+
+  public Boolean isAdmin() {
+    return isAdmin;
   }
 }
