@@ -25,6 +25,9 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
@@ -33,6 +36,7 @@ import com.google.gson.Gson;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -55,6 +59,7 @@ public class DataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the request
     String maxCommentsString = request.getParameter("max-comments");
+    String languageCode = request.getParameter("comments-language-code");
 
     // Convert the input to an int or Integer.MAX_VALUE
     int maxComments;
@@ -89,6 +94,18 @@ public class DataServlet extends HttpServlet {
       Date addedDate = (Date) entity.getProperty("addedDate");
       Double sentimentScore = (Double) entity.getProperty("sentimentScore");
 
+      // Get the supported language codes in an array
+      String[] languageCodes = Locale.getISOLanguages();
+
+      // If a languageCode was specified and it is supported, 
+      // translate the comments' message in that language
+      if(languageCode != null && Arrays.asList(languageCodes).contains(languageCode)) {
+        Translate translate = TranslateOptions.getDefaultInstance().getService();
+        Translation translation =
+            translate.translate(message, Translate.TranslateOption.targetLanguage(languageCode));
+        message = translation.getTranslatedText();
+      }
+
       comments.add(new Comment(id, message, addedBy, email, addedDate, sentimentScore));
     }
 
@@ -97,6 +114,7 @@ public class DataServlet extends HttpServlet {
     String json = gson.toJson(comments);
 
     // Send the JSON as the response
+    response.setCharacterEncoding("UTF-8");
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }

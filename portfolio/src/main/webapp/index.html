@@ -90,6 +90,10 @@
 
       <aside id="section-comments">
           <h2>Comments</h2>
+          <label for="comments-language-code">Comments language:</label>
+          <select name="comments-language" id="comments-language">
+            <option value="original">Original</option>
+          </select>
           <div id="comments-container" onscroll="onCommentsContainerScrolled()"></div>
           <div id="comment-form-container">
             <form action="/data" method="POST">
